@@ -177,8 +177,6 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.seed(123)  # Set the random seed for consistent shuffling
-
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
@@ -394,5 +392,5 @@ def personality_quiz():
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
 
-random.seed(123)  # Set the random seed for consistent randomization
+random.seed(42)
 personality_quiz()
