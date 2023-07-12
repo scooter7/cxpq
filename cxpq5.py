@@ -15,25 +15,7 @@ def personality_quiz():
         "Compassionate": "Purple",
         "Enthusiastic": "Red",
         "Bold": "Silver",
-        "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
-        "Achieve With Me": "Blue",
-        "Explore With Me": "Green",
-        "Strive With Me": "Maroon",
-        "Create With Me": "Orange",
-        "Refine With Me": "Pink",
-        "Care With Me": "Purple",
-        "Enjoy With Me": "Red",
-        "Defy With Me": "Silver",
-        "Invent With Me": "Yellow",
+        "Innovative": "Yellow"
     }
 
     image_score_map = {
@@ -45,7 +27,7 @@ def personality_quiz():
         "BlueSet.jpg": "Blue",
         "GreenSet.jpg": "Green",
         "PinkSet.jpg": "Pink",
-        "BlackSet.jpg": "Silver",
+        "BlackSet.jpg": "Silver"
     }
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
@@ -54,32 +36,22 @@ def personality_quiz():
 
     def run_quiz():
         for answer in selected_traits_q1:
-            if answer in trait_score_map:
-                score_counter[trait_score_map[answer]] += 1
-        if selected_single_trait_q2 in trait_score_map:
-            score_counter[trait_score_map[selected_single_trait_q2]] += 1
+            score_counter[trait_score_map[answer]] += 1
+        score_counter[trait_score_map[selected_single_trait_q2]] += 1
         for answer in least_represented_traits_q3:
-            if answer in trait_score_map:
-                score_counter[trait_score_map[answer]] -= 1
+            score_counter[trait_score_map[answer]] -= 1
         for answer in selected_traits_q4:
-            if answer in trait_score_map:
-                score_counter[trait_score_map[answer]] += 1
-        if selected_single_trait_q5 in trait_score_map:
-            score_counter[trait_score_map[selected_single_trait_q5]] += 1
+            score_counter[trait_score_map[answer]] += 1
+        score_counter[trait_score_map[selected_single_trait_q5]] += 1
         for answer in least_represented_traits_q6:
-            if answer in trait_score_map:
-                score_counter[trait_score_map[answer]] -= 1
+            score_counter[trait_score_map[answer]] -= 1
         for image in selected_images_q7:
-            if image in image_score_map:
-                score_counter[image_score_map[image]] += 1
-        if selected_image_q8 in image_score_map:
-            score_counter[image_score_map[selected_image_q8]] += 1
+            score_counter[image_score_map[image]] += 1
+        score_counter[image_score_map[selected_image_q8]] += 1
         for image in least_represented_images_q9:
-            if image in image_score_map:
-                score_counter[image_score_map[image]] -= 1
+            score_counter[image_score_map[image]] -= 1
         for mode in selected_modes_q10:
-            if mode in trait_score_map:
-                score_counter[trait_score_map[mode]] += 1
+            score_counter[trait_score_map[mode]] += 1
 
         sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
         top_two_colors = [color for color, _ in sorted_scores[:2]]
@@ -331,66 +303,94 @@ def personality_quiz():
                                 else:
                                     selected_image_q8 = file
 
-                        if not selected_image_q8:
-                            st.warning("Please select one image.")
-
-                        st.write("---")
-
-                        st.write("Q9. Now think about the list of groups again and select the 3 that least represent who you are.")
-
-                        remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
-
-                        # Randomize the order of remaining_images_q9
-                        random.shuffle(remaining_images_q9)
-
-                        least_represented_images_q9 = []
-
-                        for i, file in enumerate(remaining_images_q9):
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                        st.write("Your selected image: ")
+                        if selected_image_q8:
+                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
-                            selected = st.checkbox("", key=f"q9_{i}")
-                            if selected:
-                                least_represented_images_q9.append(file)
                             st.image(image, use_column_width=True)
-
-                        if len(least_represented_images_q9) != 3:
-                            st.warning("Please select exactly 3 images.")
 
                         st.write("---")
 
-                        if len(least_represented_images_q9) == 3:
-                            st.write("Q10. What mode of thinking do you identify with the most?")
+                        if selected_image_q8:
+                            st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            selected_modes_q10 = st.multiselect("", ["Achieve With Me", "Explore With Me", "Strive With Me", "Create With Me", "Refine With Me", "Care With Me", "Enjoy With Me", "Defy With Me", "Invent With Me"], key="multiselect_q10")
+                            # Randomize the order of remaining_images_q9
+                            random.shuffle(remaining_images_q9)
 
-                            if len(selected_modes_q10) == 0:
-                                st.warning("Please select at least one mode of thinking.")
+                            least_represented_images_q9 = []
+
+                            for i, file in enumerate(remaining_images_q9):
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = st.checkbox("", key=f"q9_{i}")
+                                if selected:
+                                    least_represented_images_q9.append(file)
+                                st.image(image, use_column_width=True)
+
+                            if len(least_represented_images_q9) != 3:
+                                st.warning("Please select exactly 3 images.")
 
                             st.write("---")
 
-                            if len(selected_modes_q10) > 0:
-                                top_two_colors, persona_name, score_counter = run_quiz()
+                            if len(least_represented_images_q9) == 3:
+                                st.write("Q10. Select the 3 traits below that best describe how you typically function.")
 
-                                st.title("Results")
+                                modes = [
+                                    "Focused",
+                                    "Energetic",
+                                    "Cautious",
+                                    "Immersed",
+                                    "Efficient",
+                                    "Reliable",
+                                    "Spontaneous",
+                                    "Adaptable",
+                                    "Reflective"
+                                ]
 
-                                st.write(f"Your top two colors are: {top_two_colors[0]} and {top_two_colors[1]}")
-                                st.write(f"Your persona name is: {persona_name}")
+                                # Randomize the order of modes
+                                random.shuffle(modes)
+
+                                selected_modes_q10 = []
+
+                                for mode in modes:
+                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                    if selected:
+                                        selected_modes_q10.append(mode)
+
+                                if len(selected_modes_q10) != 3:
+                                    st.warning("Please select exactly 3 traits.")
 
                                 st.write("---")
 
-                                st.write("Score Counter:")
-                                st.write(score_counter)
+                                if len(selected_modes_q10) == 3:
+                                    top_two_colors, persona_name, score_counter = run_quiz()
 
-                                st.write("---")
+                                    st.write("Congratulations! Based on your responses, your top two colors are:")
+                                    st.write(f"1. {top_two_colors[0]}")
+                                    st.write(f"2. {top_two_colors[1]}")
 
-                                st.write("Trait Score Map:")
-                                st.write(trait_score_map)
+                                    if persona_name:
+                                        st.write("Your personality archetype is:")
+                                        st.write(persona_name)
+                                else:
+                                    st.warning("Please answer all the questions.")
+                            else:
+                                st.warning("Please answer all the questions.")
+                        else:
+                            st.warning("Please answer all the questions.")
+                    else:
+                        st.warning("Please answer all the questions.")
+                else:
+                    st.warning("Please answer all the questions.")
+            else:
+                st.warning("Please answer all the questions.")
+        else:
+            st.warning("Please answer all the questions.")
+    else:
+        st.warning("Please answer all the questions.")
 
-                                st.write("---")
 
-                                st.write("Image Score Map:")
-                                st.write(image_score_map)
-
-if __name__ == "__main__":
-    personality_quiz()
+personality_quiz()
