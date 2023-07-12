@@ -34,7 +34,11 @@ def personality_quiz():
     score_counter = {color: 3 for color in color_priority}  # Start with 3 points for each color
 
     def run_quiz():
-        pass
+    # Perform the quiz logic and return the results
+    top_two_colors = []  # Placeholder for the colors
+    persona_name = ""  # Placeholder for the persona name
+    score_counter = {}  # Placeholder for the score counter
+    return top_two_colors, persona_name, score_counter
 
     def get_persona_name(primary_color, secondary_color):
         pass
