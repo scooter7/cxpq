@@ -177,12 +177,12 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.shuffle(traits)
+    random.seed(123)  # Set the random seed for consistent shuffling
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
-    for trait in traits[:9]:
+    for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -201,10 +201,8 @@ def personality_quiz():
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        random.shuffle(remaining_traits_q3)
-
         least_represented_traits_q3 = []
-        for trait in remaining_traits_q3[:9]:
+        for trait in remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -229,10 +227,8 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.shuffle(traits_q4)
-
             selected_traits_q4 = []
-            for trait in traits_q4[:9]:
+            for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -250,12 +246,10 @@ def personality_quiz():
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                random.shuffle(remaining_traits_q6)
-
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
-                for trait in remaining_traits_q6[:9]:
+                for trait in remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
@@ -281,11 +275,9 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
-                    random.shuffle(image_files_q7)
-
                     selected_images_q7 = []
 
-                    for i, file in enumerate(image_files_q7[:9]):
+                    for i, file in enumerate(image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -329,11 +321,9 @@ def personality_quiz():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            random.shuffle(remaining_images_q9)
-
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9[:9]):
+                            for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -363,10 +353,8 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                random.shuffle(modes_of_connection)
-
                                 selected_modes_q10 = []
-                                for mode in modes_of_connection[:9]:
+                                for mode in modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
                                         selected_modes_q10.append(mode)
@@ -406,4 +394,5 @@ def personality_quiz():
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
 
+random.seed(123)  # Set the random seed for consistent randomization
 personality_quiz()
