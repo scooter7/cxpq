@@ -245,6 +245,9 @@ def personality_quiz():
                                         st.write("Your persona name is: ", persona_name)
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
+                                            if color in score_counter:
+                                                st.write(f"{color}: {score_counter[color]}")
+                                            else:
+                                                st.write(f"{color}: 0")
 
 personality_quiz()
