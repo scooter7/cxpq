@@ -8,6 +8,21 @@ def run_quiz():
     top_two_colors = []
     persona_name = ""
     score_counter = {}
+
+    # Perform the quiz logic and calculate the scores
+    # Replace this logic with your actual quiz calculation
+    # Example calculation using random values:
+    for color in score_counter:
+        score_counter[color] = random.randint(0, 10)
+
+    # Get the top two colors based on the scores
+    sorted_scores = sorted(score_counter.items(), key=lambda x: x[1], reverse=True)
+    top_two_colors = [color for color, _ in sorted_scores[:2]]
+
+    # Set the persona name based on the top color
+    if top_two_colors:
+        persona_name = f"Persona for {top_two_colors[0]}"
+
     return top_two_colors, persona_name, score_counter
 
 def personality_quiz():
