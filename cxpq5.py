@@ -70,6 +70,8 @@ def personality_quiz():
 
     if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
+        if "selected_single_trait_q2" not in st.session_state:
+            st.session_state.selected_single_trait_q2 = None
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
@@ -119,6 +121,8 @@ def personality_quiz():
 
             if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
+                if "selected_single_trait_q5" not in st.session_state:
+                    st.session_state.selected_single_trait_q5 = None
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
