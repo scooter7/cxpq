@@ -132,9 +132,7 @@ def personality_quiz():
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
                 if "randomized_remaining_traits_q6" not in st.session_state:
                     st.session_state.randomized_remaining_traits_q6 = random.sample(remaining_traits_q6, len(remaining_traits_q6))
-
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
-
                 least_represented_traits_q6 = []
                 for trait in st.session_state.randomized_remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
@@ -164,8 +162,8 @@ def personality_quiz():
 
                     if "randomized_image_files_q7" not in st.session_state:
                         st.session_state.randomized_image_files_q7 = random.sample(image_files_q7, len(image_files_q7))
-                    selected_images_q7 = []
 
+                    selected_images_q7 = []
                     for i, file in enumerate(st.session_state.randomized_image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
@@ -215,7 +213,6 @@ def personality_quiz():
                                 st.session_state.randomized_remaining_images_q9 = random.sample(remaining_images_q9, len(remaining_images_q9))
 
                             least_represented_images_q9 = []
-
                             for i, file in enumerate(st.session_state.randomized_remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
