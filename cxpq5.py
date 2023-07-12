@@ -4,27 +4,6 @@ import requests
 from io import BytesIO
 import random
 
-def run_quiz():
-    top_two_colors = []
-    persona_name = ""
-    score_counter = {}
-
-    # Perform the quiz logic and calculate the scores
-    # Replace this logic with your actual quiz calculation
-    # Example calculation using random values:
-    for color in score_counter:
-        score_counter[color] = random.randint(0, 10)
-
-    # Get the top two colors based on the scores
-    sorted_scores = sorted(score_counter.items(), key=lambda x: x[1], reverse=True)
-    top_two_colors = [color for color, _ in sorted_scores[:2]]
-
-    # Set the persona name based on the top color
-    if top_two_colors:
-        persona_name = f"Persona for {top_two_colors[0]}"
-
-    return top_two_colors, persona_name, score_counter
-
 def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
@@ -52,16 +31,30 @@ def personality_quiz():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = {color: 3 for color in color_priority}
+    score_counter = {color: 3 for color in color_priority}  # Start with 3 points for each color
+
+    def run_quiz():
+        pass
 
     def get_persona_name(primary_color, secondary_color):
         pass
 
     st.title('CollegeXpress Personality Survey')
 
-    traits = ["Confident", "Curious", "Determined", "Imaginative", "Poised", "Compassionate", "Enthusiastic", "Bold", "Innovative"]
+    traits = [
+        "Confident",
+        "Curious",
+        "Determined",
+        "Imaginative",
+        "Poised",
+        "Compassionate",
+        "Enthusiastic",
+        "Bold",
+        "Innovative"
+    ]
 
-    st.write("Q1. Here is a list of 9 traits that could make up your personality. Please select exactly 3 traits that best represent who you are.")
+    st.write("Q1. Here is a list of 9 traits that could make up your personality. "
+             "Please select exactly 3 traits that best represent who you are.")
     if "randomized_traits_q1" not in st.session_state:
         st.session_state.randomized_traits_q1 = random.sample(traits, len(traits))
     selected_traits_q1 = []
@@ -77,8 +70,6 @@ def personality_quiz():
 
     if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
-        if "selected_single_trait_q2" not in st.session_state:
-            st.session_state.selected_single_trait_q2 = None
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
@@ -99,8 +90,19 @@ def personality_quiz():
         st.write("---")
 
         if len(least_represented_traits_q3) == 3:
-            st.write("Q4. Here is a new list of 9 traits that could make up your personality. Please select exactly 3 traits that best represent who you are.")
-            traits_q4 = ["Influential", "Adventurous", "Tough", "Expressive", "Polished", "Selfless", "Playful", "Independent", "Analytical"]
+            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
+                     "Please select exactly 3 traits that best represent who you are.")
+            traits_q4 = [
+                "Influential",
+                "Adventurous",
+                "Tough",
+                "Expressive",
+                "Polished",
+                "Selfless",
+                "Playful",
+                "Independent",
+                "Analytical"
+            ]
 
             if "randomized_traits_q4" not in st.session_state:
                 st.session_state.randomized_traits_q4 = random.sample(traits_q4, len(traits_q4))
@@ -117,8 +119,6 @@ def personality_quiz():
 
             if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
-                if "selected_single_trait_q5" not in st.session_state:
-                    st.session_state.selected_single_trait_q5 = None
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
@@ -141,9 +141,20 @@ def personality_quiz():
                 st.write("---")
 
                 if len(least_represented_traits_q6) == 3:
-                    st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
+                    st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
+                             "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
 
-                    image_files_q7 = ["OrangeSet.jpg", "BrownSet.jpg", "RedSet.jpg", "YellowSet.jpg", "PurpleSet.jpg", "BlueSet.jpg", "GreenSet.jpg", "PinkSet.jpg", "BlackSet.jpg"]
+                    image_files_q7 = [
+                        "OrangeSet.jpg",
+                        "BrownSet.jpg",
+                        "RedSet.jpg",
+                        "YellowSet.jpg",
+                        "PurpleSet.jpg",
+                        "BlueSet.jpg",
+                        "GreenSet.jpg",
+                        "PinkSet.jpg",
+                        "BlackSet.jpg"
+                    ]
 
                     if "randomized_image_files_q7" not in st.session_state:
                         st.session_state.randomized_image_files_q7 = random.sample(image_files_q7, len(image_files_q7))
@@ -214,9 +225,20 @@ def personality_quiz():
                             st.write("---")
 
                             if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
+                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
+                                         "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
 
-                                modes_of_connection = ["Achieve With Me", "Explore With Me", "Strive With Me", "Create With Me", "Refine With Me", "Care With Me", "Enjoy With Me", "Defy With Me", "Invent With Me"]
+                                modes_of_connection = [
+                                    "Achieve With Me",
+                                    "Explore With Me",
+                                    "Strive With Me",
+                                    "Create With Me",
+                                    "Refine With Me",
+                                    "Care With Me",
+                                    "Enjoy With Me",
+                                    "Defy With Me",
+                                    "Invent With Me"
+                                ]
 
                                 if "randomized_modes_of_connection" not in st.session_state:
                                     st.session_state.randomized_modes_of_connection = random.sample(modes_of_connection, len(modes_of_connection))
@@ -236,20 +258,20 @@ def personality_quiz():
                                 if st.button("Submit"):
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
-                                    elif not selected_single_trait_q2:
-                                        st.warning("Please select a single trait for Q2.")
+                                    elif not st.session_state.selected_single_trait_q2:
+                                        st.session_state.selected_single_trait_q2 = ""
                                     elif len(least_represented_traits_q3) != 3:
                                         st.warning("Please select exactly 3 traits for Q3.")
                                     elif len(selected_traits_q4) != 3:
                                         st.warning("Please select exactly 3 traits for Q4.")
-                                    elif not selected_single_trait_q5:
-                                        st.warning("Please select a single trait for Q5.")
+                                    elif not st.session_state.selected_single_trait_q5:
+                                        st.session_state.selected_single_trait_q5 = ""
                                     elif len(least_represented_traits_q6) != 3:
                                         st.warning("Please select exactly 3 traits for Q6.")
                                     elif len(selected_images_q7) != 3:
                                         st.warning("Please select exactly 3 images for Q7.")
                                     elif not st.session_state.selected_image_q8:
-                                        st.warning("Please select a single image for Q8.")
+                                        st.session_state.selected_image_q8 = ""
                                     elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
                                     elif len(selected_modes_q10) != 2:
@@ -260,9 +282,6 @@ def personality_quiz():
                                         st.write("Your persona name is: ", persona_name)
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
-                                            if color in score_counter:
-                                                st.write(f"{color}: {score_counter[color]}")
-                                            else:
-                                                st.write(f"{color}: 0")
+                                            st.write(f"{color}: {score_counter[color]}")
 
 personality_quiz()
