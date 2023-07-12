@@ -283,11 +283,11 @@ def personality_quiz():
                                     else:
                                         top_two_colors, persona_name, score_counter = run_quiz()
 
-                    # Display results
-                    st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                    st.write("Your persona name is: ", persona_name)
-                    st.write("Total Scores for Each Color:")
-                    for color in color_priority:
-                        st.write(f"{color}: {score_counter[color]}")
+                                        # Display results
+                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                        st.write("Your persona name is: ", persona_name)
+                                        st.write("Total Scores for Each Color:")
+                                        for color in color_priority:
+                                            st.write(f"{color}: {score_counter[color]}")
 
 personality_quiz()
