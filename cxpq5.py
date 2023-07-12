@@ -282,10 +282,12 @@ def personality_quiz():
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
                                         top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
-                                        st.write("Total Scores for Each Color:")
-                                        for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
+
+                    # Display results
+                    st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                    st.write("Your persona name is: ", persona_name)
+                    st.write("Total Scores for Each Color:")
+                    for color in color_priority:
+                        st.write(f"{color}: {score_counter[color]}")
 
 personality_quiz()
