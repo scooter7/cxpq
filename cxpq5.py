@@ -34,11 +34,9 @@ def personality_quiz():
     score_counter = {color: 3 for color in color_priority}  # Start with 3 points for each color
 
     def run_quiz():
-        # Your quiz logic here
         pass
 
     def get_persona_name(primary_color, secondary_color):
-        # Your persona name logic here
         pass
 
     st.title('CollegeXpress Personality Survey')
