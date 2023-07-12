@@ -274,7 +274,7 @@ def personality_quiz():
                                         st.warning("Please select exactly 3 traits for Q6.")
                                     elif len(selected_images_q7) != 3:
                                         st.warning("Please select exactly 3 images for Q7.")
-                                    elif not selected_image_q8:
+                                    elif not st.session_state.selected_image_q8:
                                         st.warning("Please select a single image for Q8.")
                                     elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
