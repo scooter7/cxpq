@@ -163,27 +163,16 @@ def personality_quiz():
 
         return persona_map.get((primary_color, secondary_color), "")
 
-    st.title('CollegeXpress Personality Survey')
-
-    traits = [
-        "Confident",
-        "Curious",
-        "Determined",
-        "Imaginative",
-        "Poised",
-        "Compassionate",
-        "Enthusiastic",
-        "Bold",
-        "Innovative"
-    ]
-
     # Randomize the order of traits
-    random.shuffle(traits)
+    randomized_traits = traits[:]
+    random.shuffle(randomized_traits)
+
+    st.title('CollegeXpress Personality Survey')
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
-    for trait in traits:
+    for trait in randomized_traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -202,11 +191,12 @@ def personality_quiz():
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        # Randomize the order of remaining traits
-        random.shuffle(remaining_traits_q3)
+        # Randomize the order of remaining_traits_q3
+        randomized_remaining_traits_q3 = remaining_traits_q3[:]
+        random.shuffle(randomized_remaining_traits_q3)
 
         least_represented_traits_q3 = []
-        for trait in remaining_traits_q3:
+        for trait in randomized_remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -232,10 +222,11 @@ def personality_quiz():
             ]
 
             # Randomize the order of traits_q4
-            random.shuffle(traits_q4)
+            randomized_traits_q4 = traits_q4[:]
+            random.shuffle(randomized_traits_q4)
 
             selected_traits_q4 = []
-            for trait in traits_q4:
+            for trait in randomized_traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -253,13 +244,14 @@ def personality_quiz():
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                # Randomize the order of remaining traits_q6
-                random.shuffle(remaining_traits_q6)
-
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
+                # Randomize the order of remaining_traits_q6
+                randomized_remaining_traits_q6 = remaining_traits_q6[:]
+                random.shuffle(randomized_remaining_traits_q6)
+
                 least_represented_traits_q6 = []
-                for trait in remaining_traits_q6:
+                for trait in randomized_remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
@@ -286,11 +278,12 @@ def personality_quiz():
                     ]
 
                     # Randomize the order of image_files_q7
-                    random.shuffle(image_files_q7)
+                    randomized_image_files_q7 = image_files_q7[:]
+                    random.shuffle(randomized_image_files_q7)
 
                     selected_images_q7 = []
 
-                    for i, file in enumerate(image_files_q7):
+                    for i, file in enumerate(randomized_image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -332,10 +325,7 @@ def personality_quiz():
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
-
-                            # Randomize the order of remaining_images_q9
-                            random.shuffle(remaining_images_q9)
+                            remaining_images_q9 = [file for file in randomized_image_files_q7 if file not in selected_images_q7]
 
                             least_represented_images_q9 = []
 
@@ -370,10 +360,11 @@ def personality_quiz():
                                 ]
 
                                 # Randomize the order of modes_of_connection
-                                random.shuffle(modes_of_connection)
+                                randomized_modes_of_connection = modes_of_connection[:]
+                                random.shuffle(randomized_modes_of_connection)
 
                                 selected_modes_q10 = []
-                                for mode in modes_of_connection:
+                                for mode in randomized_modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
                                         selected_modes_q10.append(mode)
