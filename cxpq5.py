@@ -4,39 +4,12 @@ from collections import Counter
 import requests
 from io import BytesIO
 import random
-import streamlit.ReportThread as ReportThread
-from streamlit.server.Server import Server
-import time
-
-
-def get_report_ctx():
-    """Hack to get the ReportThread and Server object from Streamlit."""
-    for t in threading.enumerate():
-        if t.name == "MainThread":
-            main_thread = t
-            break
-
-    main_thread_id = main_thread.ident
-    this_thread_id = threading.current_thread().ident
-
-    for thread_id, frame in sys._current_frames().items():
-        if thread_id == main_thread_id:
-            continue
-
-        if frame.f_globals['__name__'].startswith('streamlit.'):
-            if not frame.f_globals['__name__'].startswith('streamlit.ReportThread'):
-                return ReportThread.get_report_ctx_from_report_thread()
-
 
 class SessionState:
-    def __init__(self, session, seed=None):
-        self.session = session
-        self.seed = seed
-
+    pass
 
 def set_session_seed(session_state):
     random.seed(session_state.seed)
-
 
 def personality_quiz():
     trait_score_map = {
@@ -196,13 +169,7 @@ def personality_quiz():
 
         return persona_map.get((primary_color, secondary_color), "")
 
-    session_state = SessionState.get(seed=None)
-
-    if session_state.seed is None:
-        session_state.seed = random.randint(0, 10000)
-
-    set_session_seed(session_state)
-
+    # Randomize the response options order
     traits = [
         "Confident",
         "Curious",
@@ -214,10 +181,11 @@ def personality_quiz():
         "Bold",
         "Innovative"
     ]
+    random.shuffle(traits)
 
+    selected_traits_q1 = []
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    selected_traits_q1 = []
     for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
@@ -249,8 +217,7 @@ def personality_quiz():
         st.write("---")
 
         if len(least_represented_traits_q3) == 3:
-            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
-                     "Please select exactly 3 traits that best represent who you are.")
+            # Randomize the response options order
             traits_q4 = [
                 "Influential",
                 "Adventurous",
@@ -262,7 +229,10 @@ def personality_quiz():
                 "Independent",
                 "Analytical"
             ]
+            random.shuffle(traits_q4)
 
+            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
+                     "Please select exactly 3 traits that best represent who you are.")
             selected_traits_q4 = []
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
@@ -310,6 +280,7 @@ def personality_quiz():
                         "PinkSet.jpg",
                         "BlackSet.jpg"
                     ]
+                    random.shuffle(image_files_q7)
 
                     selected_images_q7 = []
 
@@ -388,6 +359,7 @@ def personality_quiz():
                                     "Defy With Me",
                                     "Invent With Me"
                                 ]
+                                random.shuffle(modes_of_connection)
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
@@ -430,5 +402,11 @@ def personality_quiz():
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
 
+# Create a SessionState object to store the random seed
+session_state = SessionState()
+session_state.seed = random.randint(0, 100)
+
+# Set the random seed for the session
+set_session_seed(session_state)
 
 personality_quiz()
