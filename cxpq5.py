@@ -16,24 +16,6 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
-        "Achieve With Me": "Blue",
-        "Explore With Me": "Green",
-        "Strive With Me": "Maroon",
-        "Create With Me": "Orange",
-        "Refine With Me": "Pink",
-        "Care With Me": "Purple",
-        "Enjoy With Me": "Red",
-        "Defy With Me": "Silver",
-        "Invent With Me": "Yellow",
     }
 
     image_score_map = {
@@ -177,8 +159,6 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.seed(42)  # Set a random seed for consistent shuffling
-
     # Randomize the order of traits
     random.shuffle(traits)
 
@@ -287,12 +267,12 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
-                    shuffled_images_q7 = image_files_q7.copy()
-                    random.shuffle(shuffled_images_q7)  # Randomize the order of image_files_q7
+                    # Randomize the order of image_files_q7
+                    random.shuffle(image_files_q7)
 
                     selected_image_indices_q7 = []
 
-                    for i, file in enumerate(shuffled_images_q7):
+                    for i, file in enumerate(image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -311,18 +291,17 @@ def personality_quiz():
 
                         selected_image_q8 = None
 
-                        for i, index in enumerate(selected_image_indices_q7):
-                            file = shuffled_images_q7[index]
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                        for i, file in enumerate(selected_image_indices_q7):
+                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{image_files_q7[file]}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             selected = st.checkbox("", key=f"q8_{i}")
                             st.image(image, use_column_width=True)
                             if selected:
-                                if selected_image_q8 is not None:
+                                if selected_image_q8:
                                     st.warning("Please select only one image.")
                                 else:
-                                    selected_image_q8 = file
+                                    selected_image_q8 = image_files_q7[file]
 
                         st.write("Your selected image: ")
                         if selected_image_q8:
@@ -335,14 +314,14 @@ def personality_quiz():
 
                         if selected_image_q8:
                             st.write("Q9. Now think about the remaining icon groups and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in shuffled_images_q7]
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_image_indices_q7]
 
-                            shuffled_remaining_images_q9 = remaining_images_q9.copy()
-                            random.shuffle(shuffled_remaining_images_q9)  # Randomize the order of remaining_images_q9
+                            # Randomize the order of remaining_images_q9
+                            random.shuffle(remaining_images_q9)
 
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(shuffled_remaining_images_q9):
+                            for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -372,7 +351,8 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                random.shuffle(modes_of_connection)  # Randomize the order of modes_of_connection
+                                # Randomize the order of modes_of_connection
+                                random.shuffle(modes_of_connection)
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
