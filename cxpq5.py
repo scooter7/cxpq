@@ -4,6 +4,39 @@ from collections import Counter
 import requests
 from io import BytesIO
 import random
+import streamlit.ReportThread as ReportThread
+from streamlit.server.Server import Server
+import time
+
+
+def get_report_ctx():
+    """Hack to get the ReportThread and Server object from Streamlit."""
+    for t in threading.enumerate():
+        if t.name == "MainThread":
+            main_thread = t
+            break
+
+    main_thread_id = main_thread.ident
+    this_thread_id = threading.current_thread().ident
+
+    for thread_id, frame in sys._current_frames().items():
+        if thread_id == main_thread_id:
+            continue
+
+        if frame.f_globals['__name__'].startswith('streamlit.'):
+            if not frame.f_globals['__name__'].startswith('streamlit.ReportThread'):
+                return ReportThread.get_report_ctx_from_report_thread()
+
+
+class SessionState:
+    def __init__(self, session, seed=None):
+        self.session = session
+        self.seed = seed
+
+
+def set_session_seed(session_state):
+    random.seed(session_state.seed)
+
 
 def personality_quiz():
     trait_score_map = {
@@ -163,7 +196,12 @@ def personality_quiz():
 
         return persona_map.get((primary_color, secondary_color), "")
 
-    st.title('CollegeXpress Personality Survey')
+    session_state = SessionState.get(seed=None)
+
+    if session_state.seed is None:
+        session_state.seed = random.randint(0, 10000)
+
+    set_session_seed(session_state)
 
     traits = [
         "Confident",
@@ -392,5 +430,5 @@ def personality_quiz():
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
 
-random.seed(42)
+
 personality_quiz()
