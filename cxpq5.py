@@ -259,19 +259,19 @@ def personality_quiz():
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
                                     elif not st.session_state.selected_single_trait_q2:
-                                        st.warning("Please select a single trait for Q2.")
+                                        st.session_state.selected_single_trait_q2 = ""
                                     elif len(least_represented_traits_q3) != 3:
                                         st.warning("Please select exactly 3 traits for Q3.")
                                     elif len(selected_traits_q4) != 3:
                                         st.warning("Please select exactly 3 traits for Q4.")
                                     elif not st.session_state.selected_single_trait_q5:
-                                        st.warning("Please select a single trait for Q5.")
+                                        st.session_state.selected_single_trait_q5 = ""
                                     elif len(least_represented_traits_q6) != 3:
                                         st.warning("Please select exactly 3 traits for Q6.")
                                     elif len(selected_images_q7) != 3:
                                         st.warning("Please select exactly 3 images for Q7.")
                                     elif not st.session_state.selected_image_q8:
-                                        st.warning("Please select a single image for Q8.")
+                                        st.session_state.selected_image_q8 = ""
                                     elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
                                     elif len(selected_modes_q10) != 2:
