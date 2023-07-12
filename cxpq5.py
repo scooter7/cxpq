@@ -68,7 +68,6 @@ def personality_quiz():
             ("Blue", "Red"): "Coach",
             ("Blue", "Silver"): "Maverick",
             ("Blue", "Yellow"): "Visionary",
-            ("Blue", "Beige"): "Achiever",
             ("Maroon", "Blue"): "Contender",
             ("Maroon", "Green"): "Need to Find",
             ("Maroon", "Orange"): "Maker",
@@ -77,7 +76,6 @@ def personality_quiz():
             ("Maroon", "Red"): "Energizer",
             ("Maroon", "Silver"): "Dark Horse",
             ("Maroon", "Yellow"): "Challenger",
-            ("Maroon", "Beige"): "Competitor",
             ("Green", "Blue"): "Trailblazer",
             ("Green", "Maroon"): "Adventurer",
             ("Green", "Orange"): "Seeker",
@@ -86,7 +84,6 @@ def personality_quiz():
             ("Green", "Red"): "Globetrotter",
             ("Green", "Silver"): "Ranger",
             ("Green", "Yellow"): "Researcher",
-            ("Green", "Beige"): "Explorer",
             ("Orange", "Blue"): "Architect",
             ("Orange", "Maroon"): "Artisan",
             ("Orange", "Green"): "Searcher",
@@ -95,7 +92,6 @@ def personality_quiz():
             ("Orange", "Red"): "Storyteller",
             ("Orange", "Silver"): "Nonconformist",
             ("Orange", "Yellow"): "Ideator",
-            ("Orange", "Beige"): "Creator",
             ("Pink", "Blue"): "Connoisseur",
             ("Pink", "Maroon"): "Perfectionist",
             ("Pink", "Green"): "Philosopher",
@@ -104,7 +100,6 @@ def personality_quiz():
             ("Pink", "Red"): "Aficionado",
             ("Pink", "Silver"): "Refiner",
             ("Pink", "Yellow"): "Trendsetter",
-            ("Pink", "Beige"): "Sophisticate",
             ("Purple", "Blue"): "Guide",
             ("Purple", "Maroon"): "Guardian",
             ("Purple", "Green"): "Shepherd",
@@ -113,7 +108,6 @@ def personality_quiz():
             ("Purple", "Red"): "Host",
             ("Purple", "Silver"): "Advocate",
             ("Purple", "Yellow"): "Advisor",
-            ("Purple", "Beige"): "Provider",
             ("Red", "Blue"): "Motivator",
             ("Red", "Maroon"): "Dynamo",
             ("Red", "Green"): "Thrill-seeker",
@@ -122,7 +116,6 @@ def personality_quiz():
             ("Red", "Purple"): "Emcee",
             ("Red", "Silver"): "DaRedevil",
             ("Red", "Yellow"): "Magician",
-            ("Red", "Beige"): "Entertainer",
             ("Silver", "Blue"): "Ringleader",
             ("Silver", "Maroon"): "Instigator",
             ("Silver", "Green"): "Rogue",
@@ -236,7 +229,6 @@ def personality_quiz():
                         "PinkSet.jpg",
                         "BlackSet.jpg"
                     ]
-
                     shuffled_images_q7 = image_files_q7.copy()
                     random.shuffle(shuffled_images_q7)
 
@@ -255,6 +247,7 @@ def personality_quiz():
 
                     if len(selected_image_indices_q7) == 3:
                         selected_image_q8 = None
+
                         for i, index in enumerate(selected_image_indices_q7):
                             file = shuffled_images_q7[index]
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
@@ -268,7 +261,7 @@ def personality_quiz():
                                 else:
                                     selected_image_q8 = file
 
-                        st.write("Your selected image: ")
+                        st.write("Your selected image:")
                         if selected_image_q8:
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
                             response = requests.get(image_url)
@@ -316,6 +309,7 @@ def personality_quiz():
                                 if len(selected_modes_q10) != 2:
                                     st.warning("Please select exactly 2 modes.")
 
+                                st.write("Please click 'Submit' once you have completed the quiz.")
                                 if st.button("Submit"):
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
@@ -339,8 +333,8 @@ def personality_quiz():
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
                                         top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
+                                        st.write("Your top two colors are:", ", ".join(top_two_colors))
+                                        st.write("Your persona name is:", persona_name)
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
