@@ -5,9 +5,6 @@ import requests
 from io import BytesIO
 import random
 
-# Set random seed for consistent randomization
-random.seed(42)
-
 def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
@@ -19,24 +16,6 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
-        "Achieve With Me": "Blue",
-        "Explore With Me": "Green",
-        "Strive With Me": "Maroon",
-        "Create With Me": "Orange",
-        "Refine With Me": "Pink",
-        "Care With Me": "Purple",
-        "Enjoy With Me": "Red",
-        "Defy With Me": "Silver",
-        "Invent With Me": "Yellow",
     }
 
     image_score_map = {
@@ -180,6 +159,9 @@ def personality_quiz():
         "Innovative"
     ]
 
+    random.seed(42)
+    random.shuffle(traits)
+
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
@@ -201,6 +183,8 @@ def personality_quiz():
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
+
+        random.shuffle(remaining_traits_q3)
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -228,6 +212,8 @@ def personality_quiz():
                 "Analytical"
             ]
 
+            random.shuffle(traits_q4)
+
             selected_traits_q4 = []
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
@@ -246,6 +232,8 @@ def personality_quiz():
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+
+                random.shuffle(remaining_traits_q6)
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -275,6 +263,8 @@ def personality_quiz():
                         "PinkSet.jpg",
                         "BlackSet.jpg"
                     ]
+
+                    random.shuffle(image_files_q7)
 
                     selected_images_q7 = []
 
@@ -322,6 +312,8 @@ def personality_quiz():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
+                            random.shuffle(remaining_images_q9)
+
                             least_represented_images_q9 = []
 
                             for i, file in enumerate(remaining_images_q9):
@@ -329,9 +321,9 @@ def personality_quiz():
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
                                 selected = st.checkbox("", key=f"q9_{i}")
-                                st.image(image, use_column_width=True)
                                 if selected:
                                     least_represented_images_q9.append(file)
+                                st.image(image, use_column_width=True)
 
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
@@ -339,55 +331,53 @@ def personality_quiz():
                             st.write("---")
 
                             if len(least_represented_images_q9) == 3:
-                                st.write("Q10. On this page, there are 9 descriptions that relate to your personality. "
-                                         "Please select the 3 that most apply to you.")
+                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
+                                         "Please select the 3 that best describe you.")
 
-                                selected_modes_q10 = [
-                                    "Achieve With Me",
-                                    "Explore With Me",
-                                    "Strive With Me",
-                                    "Create With Me",
-                                    "Refine With Me",
-                                    "Care With Me",
-                                    "Enjoy With Me",
-                                    "Defy With Me",
-                                    "Invent With Me"
+                                modes_q10 = [
+                                    "Advocate",
+                                    "Ambassador",
+                                    "Architect",
+                                    "Connoisseur",
+                                    "Maverick",
+                                    "Visionary",
+                                    "Nonconformist",
+                                    "Creator",
+                                    "Researcher"
                                 ]
 
-                                for mode in selected_modes_q10:
-                                    st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                random.shuffle(modes_q10)
+
+                                selected_modes_q10 = []
+
+                                for mode in modes_q10:
+                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                    if selected:
+                                        selected_modes_q10.append(mode)
+
+                                if len(selected_modes_q10) != 3:
+                                    st.warning("Please select exactly 3 modes.")
 
                                 st.write("---")
 
                                 if len(selected_modes_q10) == 3:
-                                    st.write("Calculating your results...")
+                                    st.write("Thank you for completing the survey!")
+
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
-                                    st.write("---")
-
-                                    st.subheader("Results")
-                                    st.write(f"Based on your responses, your top two colors are: {top_two_colors[0]} and {top_two_colors[1]}")
-
-                                    st.write(f"Your CollegeXpress persona is: {persona_name}")
-
-                                    st.write("---")
-
-                                    st.subheader("Score Breakdown")
-
-                                    score_columns = st.beta_columns(3)
-                                    score_columns[0].write("Color")
-                                    score_columns[1].write("Score")
-                                    score_columns[2].write("Rank")
-
+                                    st.write(f"Your top two colors are {top_two_colors[0]} and {top_two_colors[1]}.")
+                                    st.write(f"Your persona name is {persona_name}.")
+                                    st.write("Here is the breakdown of your scores:")
                                     for color, score in score_counter.items():
-                                        rank = color_priority.index(color) + 1
-                                        score_columns[0].write(color)
-                                        score_columns[1].write(score)
-                                        score_columns[2].write(rank)
+                                        st.write(f"- {color}: {score}")
 
-    if len(selected_traits_q1) != 3 or len(least_represented_traits_q3) != 3 or len(selected_traits_q4) != 3 or \
-            len(least_represented_traits_q6) != 3 or len(selected_images_q7) != 3 or not selected_image_q8 or \
-            len(least_represented_images_q9) != 3 or len(selected_modes_q10) != 3:
+                                    st.write("---")
+                                    st.write("Would you like to save your results?")
+
+                                    if st.button("Submit"):
+                                        st.success("Results submitted successfully!")
+
+    if not selected_traits_q1:
         st.warning("Please complete all the questions.")
 
 personality_quiz()
