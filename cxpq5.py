@@ -34,11 +34,9 @@ def personality_quiz():
     score_counter = {color: 3 for color in color_priority}  # Start with 3 points for each color
 
     def run_quiz():
-        # Your quiz logic here
         pass
 
     def get_persona_name(primary_color, secondary_color):
-        # Your persona name logic here
         pass
 
     st.title('CollegeXpress Personality Survey')
@@ -57,9 +55,10 @@ def personality_quiz():
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    randomized_traits = random.sample(traits, len(traits))
+    if "randomized_traits_q1" not in st.session_state:
+        st.session_state.randomized_traits_q1 = random.sample(traits, len(traits))
     selected_traits_q1 = []
-    for trait in randomized_traits:
+    for trait in st.session_state.randomized_traits_q1:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -77,10 +76,10 @@ def personality_quiz():
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
-        randomized_remaining_traits_q3 = random.sample(remaining_traits_q3, len(remaining_traits_q3))
-
+        if "randomized_remaining_traits_q3" not in st.session_state:
+            st.session_state.randomized_remaining_traits_q3 = random.sample(remaining_traits_q3, len(remaining_traits_q3))
         least_represented_traits_q3 = []
-        for trait in randomized_remaining_traits_q3:
+        for trait in st.session_state.randomized_remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -105,10 +104,10 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            randomized_traits_q4 = random.sample(traits_q4, len(traits_q4))
-
+            if "randomized_traits_q4" not in st.session_state:
+                st.session_state.randomized_traits_q4 = random.sample(traits_q4, len(traits_q4))
             selected_traits_q4 = []
-            for trait in randomized_traits_q4:
+            for trait in st.session_state.randomized_traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -125,12 +124,13 @@ def personality_quiz():
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
-                randomized_remaining_traits_q6 = random.sample(remaining_traits_q6, len(remaining_traits_q6))
+                if "randomized_remaining_traits_q6" not in st.session_state:
+                    st.session_state.randomized_remaining_traits_q6 = random.sample(remaining_traits_q6, len(remaining_traits_q6))
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
-                for trait in randomized_remaining_traits_q6:
+                for trait in st.session_state.randomized_remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
@@ -156,11 +156,11 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
-                    randomized_image_files_q7 = random.sample(image_files_q7, len(image_files_q7))
-
+                    if "randomized_image_files_q7" not in st.session_state:
+                        st.session_state.randomized_image_files_q7 = random.sample(image_files_q7, len(image_files_q7))
                     selected_images_q7 = []
 
-                    for i, file in enumerate(randomized_image_files_q7):
+                    for i, file in enumerate(st.session_state.randomized_image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -177,7 +177,8 @@ def personality_quiz():
                     if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
 
-                        selected_image_q8 = None
+                        if "selected_image_q8" not in st.session_state:
+                            st.session_state.selected_image_q8 = None
 
                         for i, file in enumerate(selected_images_q7):
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
@@ -186,27 +187,30 @@ def personality_quiz():
                             selected = st.checkbox("", key=f"q8_{i}")
                             st.image(image, use_column_width=True)
                             if selected:
-                                if selected_image_q8:
+                                if st.session_state.selected_image_q8:
                                     st.warning("Please select only one image.")
                                 else:
-                                    selected_image_q8 = file
+                                    st.session_state.selected_image_q8 = file
 
                         st.write("Your selected image: ")
-                        if selected_image_q8:
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
+                        if st.session_state.selected_image_q8:
+                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{st.session_state.selected_image_q8}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             st.image(image, use_column_width=True)
 
                         st.write("---")
 
-                        if selected_image_q8:
+                        if st.session_state.selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in randomized_image_files_q7 if file not in selected_images_q7]
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
+
+                            if "randomized_remaining_images_q9" not in st.session_state:
+                                st.session_state.randomized_remaining_images_q9 = random.sample(remaining_images_q9, len(remaining_images_q9))
 
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9):
+                            for i, file in enumerate(st.session_state.randomized_remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -236,10 +240,11 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                randomized_modes_of_connection = random.sample(modes_of_connection, len(modes_of_connection))
+                                if "randomized_modes_of_connection" not in st.session_state:
+                                    st.session_state.randomized_modes_of_connection = random.sample(modes_of_connection, len(modes_of_connection))
 
                                 selected_modes_q10 = []
-                                for mode in randomized_modes_of_connection:
+                                for mode in st.session_state.randomized_modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
                                         selected_modes_q10.append(mode)
@@ -253,19 +258,19 @@ def personality_quiz():
                                 if st.button("Submit"):
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
-                                    elif not selected_single_trait_q2:
+                                    elif not st.session_state.selected_single_trait_q2:
                                         st.warning("Please select a single trait for Q2.")
                                     elif len(least_represented_traits_q3) != 3:
                                         st.warning("Please select exactly 3 traits for Q3.")
                                     elif len(selected_traits_q4) != 3:
                                         st.warning("Please select exactly 3 traits for Q4.")
-                                    elif not selected_single_trait_q5:
+                                    elif not st.session_state.selected_single_trait_q5:
                                         st.warning("Please select a single trait for Q5.")
                                     elif len(least_represented_traits_q6) != 3:
                                         st.warning("Please select exactly 3 traits for Q6.")
                                     elif len(selected_images_q7) != 3:
                                         st.warning("Please select exactly 3 images for Q7.")
-                                    elif not selected_image_q8:
+                                    elif not st.session_state.selected_image_q8:
                                         st.warning("Please select a single image for Q8.")
                                     elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
