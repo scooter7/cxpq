@@ -74,7 +74,9 @@ def personality_quiz():
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
         if "selected_single_trait_q2" not in st.session_state:
             st.session_state.selected_single_trait_q2 = None
-        selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
+        selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2",
+                                   index=selected_traits_q1.index(st.session_state.selected_single_trait_q2))
+        st.session_state.selected_single_trait_q2 = selected_single_trait_q2
 
         st.write("---")
 
