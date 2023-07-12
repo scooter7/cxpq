@@ -5,6 +5,51 @@ import requests
 from io import BytesIO
 import random
 
+traits = [
+    "Confident",
+    "Curious",
+    "Determined",
+    "Imaginative",
+    "Poised",
+    "Compassionate",
+    "Enthusiastic",
+    "Bold",
+    "Innovative"
+]
+
+random.shuffle(traits)
+
+remaining_traits_q3 = [trait for trait in traits]
+random.shuffle(remaining_traits_q3)
+
+traits_q4 = [
+    "Influential",
+    "Adventurous",
+    "Tough",
+    "Expressive",
+    "Polished",
+    "Selfless",
+    "Playful",
+    "Independent",
+    "Analytical"
+]
+
+random.shuffle(traits_q4)
+
+image_files_q7 = [
+    "OrangeSet.jpg",
+    "BrownSet.jpg",
+    "RedSet.jpg",
+    "YellowSet.jpg",
+    "PurpleSet.jpg",
+    "BlueSet.jpg",
+    "GreenSet.jpg",
+    "PinkSet.jpg",
+    "BlackSet.jpg"
+]
+
+random.shuffle(image_files_q7)
+
 def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
@@ -16,15 +61,6 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
         "Achieve With Me": "Blue",
         "Explore With Me": "Green",
         "Strive With Me": "Maroon",
@@ -33,7 +69,7 @@ def personality_quiz():
         "Care With Me": "Purple",
         "Enjoy With Me": "Red",
         "Defy With Me": "Silver",
-        "Invent With Me": "Yellow",
+        "Invent With Me": "Yellow"
     }
 
     image_score_map = {
@@ -45,12 +81,12 @@ def personality_quiz():
         "BlueSet.jpg": "Blue",
         "GreenSet.jpg": "Green",
         "PinkSet.jpg": "Pink",
-        "BlackSet.jpg": "Silver",
+        "BlackSet.jpg": "Silver"
     }
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
+    score_counter = Counter({color: 3 for color in color_priority})
 
     def run_quiz():
         for answer in selected_traits_q1:
@@ -86,7 +122,6 @@ def personality_quiz():
             ("Blue", "Red"): "Coach",
             ("Blue", "Silver"): "Maverick",
             ("Blue", "Yellow"): "Visionary",
-            ("Blue", "Beige"): "Achiever",
             ("Maroon", "Blue"): "Contender",
             ("Maroon", "Green"): "Need to Find",
             ("Maroon", "Orange"): "Maker",
@@ -95,7 +130,6 @@ def personality_quiz():
             ("Maroon", "Red"): "Energizer",
             ("Maroon", "Silver"): "Dark Horse",
             ("Maroon", "Yellow"): "Challenger",
-            ("Maroon", "Beige"): "Competitor",
             ("Green", "Blue"): "Trailblazer",
             ("Green", "Maroon"): "Adventurer",
             ("Green", "Orange"): "Seeker",
@@ -104,7 +138,6 @@ def personality_quiz():
             ("Green", "Red"): "Globetrotter",
             ("Green", "Silver"): "Ranger",
             ("Green", "Yellow"): "Researcher",
-            ("Green", "Beige"): "Explorer",
             ("Orange", "Blue"): "Architect",
             ("Orange", "Maroon"): "Artisan",
             ("Orange", "Green"): "Searcher",
@@ -113,7 +146,6 @@ def personality_quiz():
             ("Orange", "Red"): "Storyteller",
             ("Orange", "Silver"): "Nonconformist",
             ("Orange", "Yellow"): "Ideator",
-            ("Orange", "Beige"): "Creator",
             ("Pink", "Blue"): "Connoisseur",
             ("Pink", "Maroon"): "Perfectionist",
             ("Pink", "Green"): "Philosopher",
@@ -122,7 +154,6 @@ def personality_quiz():
             ("Pink", "Red"): "Aficionado",
             ("Pink", "Silver"): "Refiner",
             ("Pink", "Yellow"): "Trendsetter",
-            ("Pink", "Beige"): "Sophisticate",
             ("Purple", "Blue"): "Guide",
             ("Purple", "Maroon"): "Guardian",
             ("Purple", "Green"): "Shepherd",
@@ -131,7 +162,6 @@ def personality_quiz():
             ("Purple", "Red"): "Host",
             ("Purple", "Silver"): "Advocate",
             ("Purple", "Yellow"): "Advisor",
-            ("Purple", "Beige"): "Provider",
             ("Red", "Blue"): "Motivator",
             ("Red", "Maroon"): "Dynamo",
             ("Red", "Green"): "Thrill-seeker",
@@ -140,7 +170,6 @@ def personality_quiz():
             ("Red", "Purple"): "Emcee",
             ("Red", "Silver"): "DaRedevil",
             ("Red", "Yellow"): "Magician",
-            ("Red", "Beige"): "Entertainer",
             ("Silver", "Blue"): "Ringleader",
             ("Silver", "Maroon"): "Instigator",
             ("Silver", "Green"): "Rogue",
@@ -149,7 +178,6 @@ def personality_quiz():
             ("Silver", "Purple"): "Activist",
             ("Silver", "Red"): "Rock Star",
             ("Silver", "Yellow"): "Free-thinker",
-            ("Silver", "Beige"): "Rebel",
             ("Yellow", "Blue"): "Vanguard",
             ("Yellow", "Maroon"): "Inventor",
             ("Yellow", "Green"): "Theorist",
@@ -157,31 +185,13 @@ def personality_quiz():
             ("Yellow", "Pink"): "Dreamer",
             ("Yellow", "Purple"): "Oracle",
             ("Yellow", "Red"): "Futurist",
-            ("Yellow", "Silver"): "Reformer",
-            ("Yellow", "Beige"): "Innovator"
+            ("Yellow", "Silver"): "Reformer"
         }
 
         return persona_map.get((primary_color, secondary_color), "")
 
     st.title('CollegeXpress Personality Survey')
 
-    traits = [
-        "Confident",
-        "Curious",
-        "Determined",
-        "Imaginative",
-        "Poised",
-        "Compassionate",
-        "Enthusiastic",
-        "Bold",
-        "Innovative"
-    ]
-
-    # Randomize the order of traits
-    random.shuffle(traits)
-
-    st.write("Q1. Here is a list of 9 traits that could make up your personality. "
-             "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
     for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
@@ -194,16 +204,13 @@ def personality_quiz():
     st.write("---")
 
     if len(selected_traits_q1) == 3:
-        st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
-        st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        # Randomize the order of remaining traits
-        random.shuffle(remaining_traits_q3)
+        st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -217,8 +224,6 @@ def personality_quiz():
         st.write("---")
 
         if len(least_represented_traits_q3) == 3:
-            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
-                     "Please select exactly 3 traits that best represent who you are.")
             traits_q4 = [
                 "Influential",
                 "Adventurous",
@@ -230,9 +235,6 @@ def personality_quiz():
                 "Independent",
                 "Analytical"
             ]
-
-            # Randomize the order of traits_q4
-            random.shuffle(traits_q4)
 
             selected_traits_q4 = []
             for trait in traits_q4:
@@ -246,15 +248,11 @@ def personality_quiz():
             st.write("---")
 
             if len(selected_traits_q4) == 3:
-                st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
-
-                # Randomize the order of remaining traits_q6
-                random.shuffle(remaining_traits_q6)
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -272,21 +270,6 @@ def personality_quiz():
                 if len(least_represented_traits_q6) == 3:
                     st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
                              "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
-
-                    image_files_q7 = [
-                        "OrangeSet.jpg",
-                        "BrownSet.jpg",
-                        "RedSet.jpg",
-                        "YellowSet.jpg",
-                        "PurpleSet.jpg",
-                        "BlueSet.jpg",
-                        "GreenSet.jpg",
-                        "PinkSet.jpg",
-                        "BlackSet.jpg"
-                    ]
-
-                    # Randomize the order of image_files_q7
-                    random.shuffle(image_files_q7)
 
                     selected_images_q7 = []
 
@@ -332,10 +315,8 @@ def personality_quiz():
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            # Randomize the order of remaining_images_q9
-                            random.shuffle(remaining_images_q9)
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
                             least_represented_images_q9 = []
 
@@ -368,9 +349,6 @@ def personality_quiz():
                                     "Defy With Me",
                                     "Invent With Me"
                                 ]
-
-                                # Randomize the order of modes_of_connection
-                                random.shuffle(modes_of_connection)
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
