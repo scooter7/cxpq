@@ -367,7 +367,7 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                                                for mode in modes_of_connection:
+                                    for mode in modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
                                         selected_modes_q10.append(mode)
