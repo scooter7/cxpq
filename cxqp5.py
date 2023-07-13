@@ -5,8 +5,6 @@ import requests
 from io import BytesIO
 import random
 
-random.seed(st.session_state)
-
 def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
@@ -163,7 +161,7 @@ def personality_quiz():
             ("Yellow", "Beige"): "Innovator"
         }
 
-        return persona_map.get((primary_color, secondary_color), "")
+    return persona_map.get((primary_color, secondary_color), "")
 
     st.title('CollegeXpress Personality Survey')
 
