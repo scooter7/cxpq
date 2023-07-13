@@ -179,12 +179,8 @@ def personality_quiz():
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    random.seed(1)  # Set random seed for Q1
-    selected_traits_q1 = random.sample(traits, 3)
-    for trait in selected_traits_q1:
-        selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
-        if selected:
-            selected_traits_q1.append(trait)
+    random.shuffle(traits)  # Randomize the order of traits
+    selected_traits_q1 = st.multiselect("", traits, [], key="multiselect_q1")
 
     if len(selected_traits_q1) != 3:
         st.warning("Please select exactly 3 traits.")
@@ -193,20 +189,15 @@ def personality_quiz():
 
     if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
-        random.seed(2)  # Set random seed for Q2
-        selected_single_trait_q2 = random.choice(selected_traits_q1)
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
-        random.seed(3)  # Set random seed for Q3
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
-        least_represented_traits_q3 = random.sample(remaining_traits_q3, 3)
-        for trait in least_represented_traits_q3:
-            selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
-            if selected:
-                least_represented_traits_q3.append(trait)
+        random.shuffle(remaining_traits_q3)  # Randomize the order of remaining traits
+
+        least_represented_traits_q3 = st.multiselect("", remaining_traits_q3, [], key="multiselect_q3")
 
         if len(least_represented_traits_q3) != 3:
             st.warning("Please select exactly 3 traits.")
@@ -228,12 +219,9 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.seed(4)  # Set random seed for Q4
-            selected_traits_q4 = random.sample(traits_q4, 3)
-            for trait in selected_traits_q4:
-                selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
-                if selected:
-                    selected_traits_q4.append(trait)
+            random.shuffle(traits_q4)  # Randomize the order of traits_q4
+
+            selected_traits_q4 = st.multiselect("", traits_q4, [], key="multiselect_q4")
 
             if len(selected_traits_q4) != 3:
                 st.warning("Please select exactly 3 traits.")
@@ -242,22 +230,16 @@ def personality_quiz():
 
             if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
-                random.seed(5)  # Set random seed for Q5
-                selected_single_trait_q5 = random.choice(selected_traits_q4)
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+                random.shuffle(remaining_traits_q6)  # Randomize the order of remaining traits
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
-                random.seed(6)  # Set random seed for Q6
-                least_represented_traits_q6 = random.sample(remaining_traits_q6, 3)
-                for trait in least_represented_traits_q6:
-                    selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
-                    if selected:
-                        least_represented_traits_q6.append(trait)
+                least_represented_traits_q6 = st.multiselect("", remaining_traits_q6, [], key="multiselect_q6")
 
                 if len(least_represented_traits_q6) != 3:
                     st.warning("Please select exactly 3 traits.")
@@ -280,11 +262,11 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
+                    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
+
                     selected_images_q7 = []
 
-                    random.seed(7)  # Set random seed for Q7
-                    for i in random.sample(range(len(image_files_q7)), 9):
-                        file = image_files_q7[i]
+                    for i, file in enumerate(image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -326,10 +308,12 @@ def personality_quiz():
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            random.seed(9)  # Set random seed for Q9
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
-                            least_represented_images_q9 = random.sample(remaining_images_q9, 3)
-                            for i, file in enumerate(least_represented_images_q9):
+                            random.shuffle(remaining_images_q9)  # Randomize the order of remaining images
+
+                            least_represented_images_q9 = []
+
+                            for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -359,8 +343,10 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                random.seed(10)  # Set random seed for Q10
-                                selected_modes_q10 = random.sample(modes_of_connection, 2)
+                                random.shuffle(modes_of_connection)  # Randomize the order of modes_of_connection
+
+                                selected_modes_q10 = []
+
                                 for mode in modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
