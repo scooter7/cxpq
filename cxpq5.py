@@ -367,7 +367,13 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                selected_modes_q10 = st.multiselect("", modes_q10, key="multiselect_q10")
+                                                                for mode in modes_of_connection:
+                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                    if selected:
+                                        selected_modes_q10.append(mode)
+
+                                if len(selected_modes_q10) != 2:
+                                    st.warning("Please select exactly 2 modes.")
 
                                 st.write("---")
 
