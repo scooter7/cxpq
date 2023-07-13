@@ -373,7 +373,7 @@ def personality_quiz():
                                         selected_modes_q10.append(mode)
 
                                     if len(selected_modes_q10) != 2:
-                                    st.warning("Please select exactly 2 modes.")
+                                        st.warning("Please select exactly 2 modes.")
 
                                 st.write("---")
 
