@@ -377,7 +377,7 @@ def personality_quiz():
 
                             st.write("---")
 
-                                if selected_modes_q10:
+                            if selected_modes_q10:
                                     st.write("Quiz Results:")
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
