@@ -3,28 +3,8 @@ from PIL import Image
 from collections import Counter
 import requests
 from io import BytesIO
-import random
-from streamlit import caching
-from streamlit.report_thread import get_report_ctx
-
-class SessionState:
-    def __init__(self, **kwargs):
-        for key, val in kwargs.items():
-            setattr(self, key, val)
 
 def personality_quiz():
-    traits = [
-        "Confident",
-        "Curious",
-        "Determined",
-        "Imaginative",
-        "Poised",
-        "Compassionate",
-        "Enthusiastic",
-        "Bold",
-        "Innovative"
-    ]
-
     trait_score_map = {
         "Confident": "Blue",
         "Curious": "Green",
@@ -35,6 +15,24 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
+        "Influential": "Blue",
+        "Adventurous": "Green",
+        "Tough": "Maroon",
+        "Expressive": "Orange",
+        "Polished": "Pink",
+        "Selfless": "Purple",
+        "Playful": "Red",
+        "Independent": "Silver",
+        "Analytical": "Yellow",
+        "Achieve With Me": "Blue",
+        "Explore With Me": "Green",
+        "Strive With Me": "Maroon",
+        "Create With Me": "Orange",
+        "Refine With Me": "Pink",
+        "Care With Me": "Purple",
+        "Enjoy With Me": "Red",
+        "Defy With Me": "Silver",
+        "Invent With Me": "Yellow",
     }
 
     image_score_map = {
@@ -51,109 +49,25 @@ def personality_quiz():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    ctx = get_report_ctx()
-    session_state = SessionState(ctx=ctx)
-
-    if not hasattr(session_state, 'random_traits_q1'):
-        session_state.random_traits_q1 = random.sample(traits, len(traits))
-    
-    if not hasattr(session_state, 'random_remaining_traits_q3'):
-        session_state.random_remaining_traits_q3 = random.sample([trait for trait in traits if trait not in session_state.selected_traits_q1], len([trait for trait in traits if trait not in session_state.selected_traits_q1]))
-
-    if not hasattr(session_state, 'random_traits_q4'):
-        session_state.random_traits_q4 = random.sample([
-            "Influential",
-            "Adventurous",
-            "Tough",
-            "Expressive",
-            "Polished",
-            "Selfless",
-            "Playful",
-            "Independent",
-            "Analytical"
-        ], 9)
-
-    if not hasattr(session_state, 'random_remaining_traits_q6'):
-        session_state.random_remaining_traits_q6 = random.sample([trait for trait in session_state.random_traits_q4 if trait not in session_state.selected_traits_q4], len([trait for trait in session_state.random_traits_q4 if trait not in session_state.selected_traits_q4]))
-
-    if not hasattr(session_state, 'random_image_files_q7'):
-        session_state.random_image_files_q7 = random.sample([
-            "OrangeSet.jpg",
-            "BrownSet.jpg",
-            "RedSet.jpg",
-            "YellowSet.jpg",
-            "PurpleSet.jpg",
-            "BlueSet.jpg",
-            "GreenSet.jpg",
-            "PinkSet.jpg",
-            "BlackSet.jpg"
-        ], 9)
-
-    if not hasattr(session_state, 'random_remaining_images_q9'):
-        session_state.random_remaining_images_q9 = random.sample([file for file in session_state.random_image_files_q7 if file not in session_state.selected_images_q7], len([file for file in session_state.random_image_files_q7 if file not in session_state.selected_images_q7]))
-
-    if not hasattr(session_state, 'random_modes_of_connection'):
-        session_state.random_modes_of_connection = random.sample([
-            "Achieve With Me",
-            "Explore With Me",
-            "Strive With Me",
-            "Create With Me",
-            "Refine With Me",
-            "Care With Me",
-            "Enjoy With Me",
-            "Defy With Me",
-            "Invent With Me"
-        ], 9)
-
-    if not hasattr(session_state, 'selected_traits_q1'):
-        session_state.selected_traits_q1 = []
-    
-    if not hasattr(session_state, 'selected_single_trait_q2'):
-        session_state.selected_single_trait_q2 = ""
-
-    if not hasattr(session_state, 'least_represented_traits_q3'):
-        session_state.least_represented_traits_q3 = []
-    
-    if not hasattr(session_state, 'selected_traits_q4'):
-        session_state.selected_traits_q4 = []
-    
-    if not hasattr(session_state, 'selected_single_trait_q5'):
-        session_state.selected_single_trait_q5 = ""
-    
-    if not hasattr(session_state, 'least_represented_traits_q6'):
-        session_state.least_represented_traits_q6 = []
-    
-    if not hasattr(session_state, 'selected_images_q7'):
-        session_state.selected_images_q7 = []
-    
-    if not hasattr(session_state, 'selected_image_q8'):
-        session_state.selected_image_q8 = ""
-    
-    if not hasattr(session_state, 'least_represented_images_q9'):
-        session_state.least_represented_images_q9 = []
-    
-    if not hasattr(session_state, 'selected_modes_q10'):
-        session_state.selected_modes_q10 = []
+    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
 
     def run_quiz():
-        score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
-
-        for answer in session_state.selected_traits_q1:
+        for answer in selected_traits_q1:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[session_state.selected_single_trait_q2]] += 1
-        for answer in session_state.least_represented_traits_q3:
+        score_counter[trait_score_map[selected_single_trait_q2]] += 1
+        for answer in least_represented_traits_q3:
             score_counter[trait_score_map[answer]] -= 1
-        for answer in session_state.selected_traits_q4:
+        for answer in selected_traits_q4:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[session_state.selected_single_trait_q5]] += 1
-        for answer in session_state.least_represented_traits_q6:
+        score_counter[trait_score_map[selected_single_trait_q5]] += 1
+        for answer in least_represented_traits_q6:
             score_counter[trait_score_map[answer]] -= 1
-        for image in session_state.selected_images_q7:
+        for image in selected_images_q7:
             score_counter[image_score_map[image]] += 1
-        score_counter[image_score_map[session_state.selected_image_q8]] += 1
-        for image in session_state.least_represented_images_q9:
+        score_counter[image_score_map[selected_image_q8]] += 1
+        for image in least_represented_images_q9:
             score_counter[image_score_map[image]] -= 1
-        for mode in session_state.selected_modes_q10:
+        for mode in selected_modes_q10:
             score_counter[trait_score_map[mode]] += 1
 
         sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
@@ -250,158 +164,224 @@ def personality_quiz():
 
     st.title('CollegeXpress Personality Survey')
 
+    traits = [
+        "Confident",
+        "Curious",
+        "Determined",
+        "Imaginative",
+        "Poised",
+        "Compassionate",
+        "Enthusiastic",
+        "Bold",
+        "Innovative"
+    ]
+
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    for trait in session_state.random_traits_q1:
+    selected_traits_q1 = []
+    for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
-            session_state.selected_traits_q1.append(trait)
+            selected_traits_q1.append(trait)
 
-    if len(session_state.selected_traits_q1) != 3:
+    if len(selected_traits_q1) != 3:
         st.warning("Please select exactly 3 traits.")
 
     st.write("---")
 
-    if len(session_state.selected_traits_q1) == 3:
+    if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
-        session_state.selected_single_trait_q2 = st.radio("", session_state.selected_traits_q1, key="radio_q2")
+        selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
-        for trait in session_state.random_remaining_traits_q3:
+        remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
+
+        least_represented_traits_q3 = []
+        for trait in remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
-                session_state.least_represented_traits_q3.append(trait)
+                least_represented_traits_q3.append(trait)
 
-        if len(session_state.least_represented_traits_q3) != 3:
+        if len(least_represented_traits_q3) != 3:
             st.warning("Please select exactly 3 traits.")
 
         st.write("---")
 
-        if len(session_state.least_represented_traits_q3) == 3:
+        if len(least_represented_traits_q3) == 3:
             st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
                      "Please select exactly 3 traits that best represent who you are.")
-            for trait in session_state.random_traits_q4:
+            traits_q4 = [
+                "Influential",
+                "Adventurous",
+                "Tough",
+                "Expressive",
+                "Polished",
+                "Selfless",
+                "Playful",
+                "Independent",
+                "Analytical"
+            ]
+
+            selected_traits_q4 = []
+            for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
-                    session_state.selected_traits_q4.append(trait)
+                    selected_traits_q4.append(trait)
 
-            if len(session_state.selected_traits_q4) != 3:
+            if len(selected_traits_q4) != 3:
                 st.warning("Please select exactly 3 traits.")
 
             st.write("---")
 
-            if len(session_state.selected_traits_q4) == 3:
+            if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
-                session_state.selected_single_trait_q5 = st.radio("", session_state.selected_traits_q4, key="radio_q5")
+                selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
 
-                for trait in session_state.random_remaining_traits_q6:
+                remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+
+                st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
+
+                least_represented_traits_q6 = []
+                for trait in remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
-                        session_state.least_represented_traits_q6.append(trait)
+                        least_represented_traits_q6.append(trait)
 
-                if len(session_state.least_represented_traits_q6) != 3:
+                if len(least_represented_traits_q6) != 3:
                     st.warning("Please select exactly 3 traits.")
 
                 st.write("---")
 
-                if len(session_state.least_represented_traits_q6) == 3:
+                if len(least_represented_traits_q6) == 3:
                     st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
                              "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
 
-                    for i, file in enumerate(session_state.random_image_files_q7):
+                    image_files_q7 = [
+                        "OrangeSet.jpg",
+                        "BrownSet.jpg",
+                        "RedSet.jpg",
+                        "YellowSet.jpg",
+                        "PurpleSet.jpg",
+                        "BlueSet.jpg",
+                        "GreenSet.jpg",
+                        "PinkSet.jpg",
+                        "BlackSet.jpg"
+                    ]
+
+                    selected_images_q7 = []
+
+                    for i, file in enumerate(image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
                         selected = st.checkbox("", key=f"q7_{i}")
                         if selected:
-                            session_state.selected_images_q7.append(file)
+                            selected_images_q7.append(file)
                         st.image(image, use_column_width=True)
 
-                    if len(session_state.selected_images_q7) != 3:
+                    if len(selected_images_q7) != 3:
                         st.warning("Please select exactly 3 images.")
 
                     st.write("---")
 
-                    if len(session_state.selected_images_q7) == 3:
+                    if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
 
-                        for i, file in enumerate(session_state.selected_images_q7):
+                        selected_image_q8 = None
+
+                        for i, file in enumerate(selected_images_q7):
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             selected = st.checkbox("", key=f"q8_{i}")
                             st.image(image, use_column_width=True)
                             if selected:
-                                if session_state.selected_image_q8:
+                                if selected_image_q8:
                                     st.warning("Please select only one image.")
                                 else:
-                                    session_state.selected_image_q8 = file
+                                    selected_image_q8 = file
 
                         st.write("Your selected image: ")
-                        if session_state.selected_image_q8:
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{session_state.selected_image_q8}"
+                        if selected_image_q8:
+                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             st.image(image, use_column_width=True)
 
                         st.write("---")
 
-                        if session_state.selected_image_q8:
+                        if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            for i, file in enumerate(session_state.random_remaining_images_q9):
+                            least_represented_images_q9 = []
+
+                            for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
                                 selected = st.checkbox("", key=f"q9_{i}")
                                 if selected:
-                                    session_state.least_represented_images_q9.append(file)
+                                    least_represented_images_q9.append(file)
                                 st.image(image, use_column_width=True)
 
-                            if len(session_state.least_represented_images_q9) != 3:
+                            if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
 
                             st.write("---")
 
-                            if len(session_state.least_represented_images_q9) == 3:
+                            if len(least_represented_images_q9) == 3:
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
                                          "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
 
-                                for mode in session_state.random_modes_of_connection:
+                                modes_of_connection = [
+                                    "Achieve With Me",
+                                    "Explore With Me",
+                                    "Strive With Me",
+                                    "Create With Me",
+                                    "Refine With Me",
+                                    "Care With Me",
+                                    "Enjoy With Me",
+                                    "Defy With Me",
+                                    "Invent With Me"
+                                ]
+
+                                selected_modes_q10 = []
+                                for mode in modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
-                                        session_state.selected_modes_q10.append(mode)
+                                        selected_modes_q10.append(mode)
 
-                                if len(session_state.selected_modes_q10) != 2:
+                                if len(selected_modes_q10) != 2:
                                     st.warning("Please select exactly 2 modes.")
 
                                 st.write("---")
 
                                 st.write("Please click 'Submit' once you have completed the quiz.")
                                 if st.button("Submit"):
-                                    if len(session_state.selected_traits_q1) != 3:
+                                    if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
-                                    elif not session_state.selected_single_trait_q2:
+                                    elif not selected_single_trait_q2:
                                         st.warning("Please select a single trait for Q2.")
-                                    elif len(session_state.least_represented_traits_q3) != 3:
+                                    elif len(least_represented_traits_q3) != 3:
                                         st.warning("Please select exactly 3 traits for Q3.")
-                                    elif len(session_state.selected_traits_q4) != 3:
+                                    elif len(selected_traits_q4) != 3:
                                         st.warning("Please select exactly 3 traits for Q4.")
-                                    elif not session_state.selected_single_trait_q5:
+                                    elif not selected_single_trait_q5:
                                         st.warning("Please select a single trait for Q5.")
-                                    elif len(session_state.least_represented_traits_q6) != 3:
+                                    elif len(least_represented_traits_q6) != 3:
                                         st.warning("Please select exactly 3 traits for Q6.")
-                                    elif len(session_state.selected_images_q7) != 3:
+                                    elif len(selected_images_q7) != 3:
                                         st.warning("Please select exactly 3 images for Q7.")
-                                    elif not session_state.selected_image_q8:
+                                    elif not selected_image_q8:
                                         st.warning("Please select a single image for Q8.")
-                                    elif len(session_state.least_represented_images_q9) != 3:
+                                    elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
-                                    elif len(session_state.selected_modes_q10) != 2:
+                                    elif len(selected_modes_q10) != 2:
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
                                         top_two_colors, persona_name, score_counter = run_quiz()
