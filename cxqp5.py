@@ -4,8 +4,21 @@ from collections import Counter
 import requests
 from io import BytesIO
 import random
+import hashlib
 
-random.seed()
+# Function to create a seed from the user session and question number
+def create_seed(session_id, question_number):
+    # Use a hash function to ensure the seed is an integer
+    seed = int(hashlib.sha256(f"{session_id}{question_number}".encode()).hexdigest(), 16) % 10**8
+    return seed
+
+# Function to randomize a list using a seed
+def randomize_list(list_str, seed):
+    options = list_str.split(', ')
+    random.seed(seed)
+    random_options = random.sample(options, len(options))
+    random_list_str = ', '.join(random_options)
+    return random_list_str
 
 def personality_quiz():
     trait_score_map = {
@@ -50,7 +63,7 @@ def personality_quiz():
         "BlackSet.jpg": "Silver",
     }
 
-    color_priority = ["Purple", "Red", "Silver", "Yellow", "Orange", "Green", "Maroon", "Pink", "Blue"]
+    color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
     score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
 
@@ -167,7 +180,12 @@ def personality_quiz():
 
     st.title('CollegeXpress Personality Survey')
 
-    traits = random.sample([
+    # Placeholder for the user session ID
+    # In a real application, this should be replaced with the actual session ID
+    session_id = 1
+
+    # Randomize the traits for question 1
+    traits_q1 = [
         "Confident",
         "Curious",
         "Determined",
@@ -177,7 +195,8 @@ def personality_quiz():
         "Enthusiastic",
         "Bold",
         "Innovative"
-    ], 9)
+    ]
+    traits_q1 = randomize_list(traits_q1, create_seed(session_id, 1))
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
@@ -215,17 +234,18 @@ def personality_quiz():
         if len(least_represented_traits_q3) == 3:
             st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
                      "Please select exactly 3 traits that best represent who you are.")
-            traits_q4 = [
-                "Influential",
-                "Adventurous",
-                "Tough",
-                "Expressive",
-                "Polished",
-                "Selfless",
-                "Playful",
-                "Independent",
-                "Analytical"
-            ]
+        traits_q4 = [
+            "Influential",
+            "Adventurous",
+            "Tough",
+            "Expressive",
+            "Polished",
+            "Selfless",
+            "Playful",
+            "Independent",
+            "Analytical"
+    ]
+        traits_q4 = randomize_list(traits_q4, create_seed(session_id, 4))
 
             selected_traits_q4 = []
             for trait in traits_q4:
@@ -341,17 +361,18 @@ def personality_quiz():
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
                                          "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
 
-                                modes_of_connection = [
-                                    "Achieve With Me",
-                                    "Explore With Me",
-                                    "Strive With Me",
-                                    "Create With Me",
-                                    "Refine With Me",
-                                    "Care With Me",
-                                    "Enjoy With Me",
-                                    "Defy With Me",
-                                    "Invent With Me"
-                                ]
+                    modes_of_connection = [
+                        "Achieve With Me",
+                        "Explore With Me",
+                        "Strive With Me",
+                        "Create With Me",
+                        "Refine With Me",
+                        "Care With Me",
+                        "Enjoy With Me",
+                        "Defy With Me",
+                        "Invent With Me"
+    ]
+    modes_of_connection = randomize_list(modes_of_connection, create_seed(session_id, 10))
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
