@@ -55,17 +55,17 @@ def personality_quiz():
     def run_quiz():
         for answer in selected_traits_q1:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q2[0]]] += 1
+        score_counter[trait_score_map[selected_single_trait_q2]] += 1
         for answer in least_represented_traits_q3:
             score_counter[trait_score_map[answer]] -= 1
         for answer in selected_traits_q4:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q5[0]]] += 1
+        score_counter[trait_score_map[selected_single_trait_q5]] += 1
         for answer in least_represented_traits_q6:
             score_counter[trait_score_map[answer]] -= 1
         for image in selected_images_q7:
             score_counter[image_score_map[image]] += 1
-        score_counter[image_score_map[selected_image_q8[0]]] += 1
+        score_counter[image_score_map[selected_image_q8]] += 1
         for image in least_represented_images_q9:
             score_counter[image_score_map[image]] -= 1
         for mode in selected_modes_q10:
@@ -367,11 +367,14 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                selected_modes_q10 = st.multiselect("", modes_q10, key="multiselect_q10")
+                                selected_modes_q10 = st.multiselect("", modes_q10, key="multiselect_q10", max_value=2)
 
                                 st.write("---")
 
-                                if selected_modes_q10:
+                                if len(selected_modes_q10) != 2:
+                                    st.warning("Please select exactly 2 modes.")
+
+                                if len(selected_modes_q10) == 2:
                                     st.write("Quiz Results:")
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
