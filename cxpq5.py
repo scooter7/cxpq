@@ -183,7 +183,7 @@ def personality_quiz():
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
-    for trait in traits[:3]:
+    for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -206,7 +206,7 @@ def personality_quiz():
         random.shuffle(remaining_traits_q3)
 
         least_represented_traits_q3 = []
-        for trait in remaining_traits_q3[:3]:
+        for trait in remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -235,7 +235,7 @@ def personality_quiz():
             random.shuffle(traits_q4)
 
             selected_traits_q4 = []
-            for trait in traits_q4[:3]:
+            for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -259,7 +259,7 @@ def personality_quiz():
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
-                for trait in remaining_traits_q6[:3]:
+                for trait in remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
