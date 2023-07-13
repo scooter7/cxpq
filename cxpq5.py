@@ -174,14 +174,12 @@ def personality_quiz():
         "Compassionate",
         "Enthusiastic",
         "Bold",
-        "Innovative",
-        "Analytical"
+        "Innovative"
     ]
 
-    session_seed = random.randint(1, 1000)
-    random.seed(session_seed)
-    random.shuffle(traits)  # Shuffle the traits list
-
+    random.seed(42)
+    random.shuffle(traits)
+    
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
@@ -204,9 +202,9 @@ def personality_quiz():
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        random.seed(session_seed)
+        random.seed(42)
         random.shuffle(remaining_traits_q3)
-
+        
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
@@ -233,9 +231,9 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.seed(session_seed)
+            random.seed(42)
             random.shuffle(traits_q4)
-
+            
             selected_traits_q4 = []
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
@@ -255,9 +253,9 @@ def personality_quiz():
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                random.seed(session_seed)
+                random.seed(42)
                 random.shuffle(remaining_traits_q6)
-
+                
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
@@ -287,9 +285,9 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
-                    random.seed(session_seed)
+                    random.seed(42)
                     random.shuffle(image_files_q7)
-
+                    
                     selected_images_q7 = []
 
                     for i, file in enumerate(image_files_q7):
@@ -336,9 +334,9 @@ def personality_quiz():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            random.seed(session_seed)
+                            random.seed(42)
                             random.shuffle(remaining_images_q9)
-
+                            
                             least_represented_images_q9 = []
 
                             for i, file in enumerate(remaining_images_q9):
@@ -349,11 +347,6 @@ def personality_quiz():
                                 if selected:
                                     least_represented_images_q9.append(file)
                                 st.image(image, use_column_width=True)
-
-                            if len(least_represented_images_q9) != 3:
-                                st.warning("Please select exactly 3 images.")
-
-                            st.write("---")
 
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
@@ -416,6 +409,5 @@ def personality_quiz():
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
-
 
 personality_quiz()
