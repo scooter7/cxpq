@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 from PIL import Image
 from collections import Counter
 import requests
@@ -14,25 +15,7 @@ def personality_quiz():
         "Compassionate": "Purple",
         "Enthusiastic": "Red",
         "Bold": "Silver",
-        "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
-        "Achieve With Me": "Blue",
-        "Explore With Me": "Green",
-        "Strive With Me": "Maroon",
-        "Create With Me": "Orange",
-        "Refine With Me": "Pink",
-        "Care With Me": "Purple",
-        "Enjoy With Me": "Red",
-        "Defy With Me": "Silver",
-        "Invent With Me": "Yellow",
+        "Innovative": "Yellow"
     }
 
     image_score_map = {
@@ -44,7 +27,7 @@ def personality_quiz():
         "BlueSet.jpg": "Blue",
         "GreenSet.jpg": "Green",
         "PinkSet.jpg": "Pink",
-        "BlackSet.jpg": "Silver",
+        "BlackSet.jpg": "Silver"
     }
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
@@ -176,6 +159,8 @@ def personality_quiz():
         "Innovative"
     ]
 
+    random.shuffle(traits)  # Randomize the traits order
+
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
@@ -197,6 +182,8 @@ def personality_quiz():
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
+
+        random.shuffle(remaining_traits_q3)  # Randomize the remaining traits order
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -224,6 +211,8 @@ def personality_quiz():
                 "Analytical"
             ]
 
+            random.shuffle(traits_q4)  # Randomize the traits_q4 order
+
             selected_traits_q4 = []
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
@@ -242,6 +231,8 @@ def personality_quiz():
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+
+                random.shuffle(remaining_traits_q6)  # Randomize the remaining_traits_q6 order
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -271,6 +262,8 @@ def personality_quiz():
                         "PinkSet.jpg",
                         "BlackSet.jpg"
                     ]
+
+                    random.shuffle(image_files_q7)  # Randomize the image_files_q7 order
 
                     selected_images_q7 = []
 
@@ -318,6 +311,8 @@ def personality_quiz():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
+                            random.shuffle(remaining_images_q9)  # Randomize the remaining_images_q9 order
+
                             least_represented_images_q9 = []
 
                             for i, file in enumerate(remaining_images_q9):
@@ -349,6 +344,8 @@ def personality_quiz():
                                     "Defy With Me",
                                     "Invent With Me"
                                 ]
+
+                                random.shuffle(modes_of_connection)  # Randomize the modes_of_connection order
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
