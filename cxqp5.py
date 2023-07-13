@@ -167,7 +167,7 @@ def personality_quiz():
 
     st.title('CollegeXpress Personality Survey')
 
-     traits = random.sample([
+    traits = random.sample([
         "Confident",
         "Curious",
         "Determined",
