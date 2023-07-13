@@ -161,7 +161,7 @@ def personality_quiz():
             ("Yellow", "Beige"): "Innovator"
         }
 
-    return persona_map.get((primary_color, secondary_color), "")
+        return persona_map.get((primary_color, secondary_color), "")
 
     st.title('CollegeXpress Personality Survey')
 
@@ -177,12 +177,11 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random_traits = random.sample(traits, len(traits))
-
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    selected_traits_q1 = []
-    for trait in traits:
+    random.seed(1)  # Set random seed for Q1
+    selected_traits_q1 = random.sample(traits, 3)
+    for trait in selected_traits_q1:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -194,15 +193,17 @@ def personality_quiz():
 
     if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
+        random.seed(2)  # Set random seed for Q2
+        selected_single_trait_q2 = random.choice(selected_traits_q1)
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
+        random.seed(3)  # Set random seed for Q3
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
-
-        least_represented_traits_q3 = []
-        for trait in remaining_traits_q3:
+        least_represented_traits_q3 = random.sample(remaining_traits_q3, 3)
+        for trait in least_represented_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -227,10 +228,9 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random_traits_q4 = random.sample(traits_q4, len(traits))
-
-            selected_traits_q4 = []
-            for trait in traits_q4:
+            random.seed(4)  # Set random seed for Q4
+            selected_traits_q4 = random.sample(traits_q4, 3)
+            for trait in selected_traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -242,6 +242,8 @@ def personality_quiz():
 
             if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
+                random.seed(5)  # Set random seed for Q5
+                selected_single_trait_q5 = random.choice(selected_traits_q4)
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
@@ -250,8 +252,9 @@ def personality_quiz():
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
-                least_represented_traits_q6 = []
-                for trait in remaining_traits_q6:
+                random.seed(6)  # Set random seed for Q6
+                least_represented_traits_q6 = random.sample(remaining_traits_q6, 3)
+                for trait in least_represented_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
@@ -277,11 +280,11 @@ def personality_quiz():
                         "BlackSet.jpg"
                     ]
 
-                    random_image_files_q7 = random.sample(image_files_q7, len(image_files_q7))
-
                     selected_images_q7 = []
 
-                    for i, file in enumerate(image_files_q7):
+                    random.seed(7)  # Set random seed for Q7
+                    for i in random.sample(range(len(image_files_q7)), 9):
+                        file = image_files_q7[i]
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -323,11 +326,10 @@ def personality_quiz():
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
+                            random.seed(9)  # Set random seed for Q9
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
-
-                            least_represented_images_q9 = []
-
-                            for i, file in enumerate(remaining_images_q9):
+                            least_represented_images_q9 = random.sample(remaining_images_q9, 3)
+                            for i, file in enumerate(least_represented_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -357,9 +359,8 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                random_modes_of_connection = random.sample(modes_of_connection, len(modes_of_connection))
-
-                                selected_modes_q10 = []
+                                random.seed(10)  # Set random seed for Q10
+                                selected_modes_q10 = random.sample(modes_of_connection, 2)
                                 for mode in modes_of_connection:
                                     selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
                                     if selected:
