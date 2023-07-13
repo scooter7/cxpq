@@ -15,7 +15,25 @@ def personality_quiz():
         "Compassionate": "Purple",
         "Enthusiastic": "Red",
         "Bold": "Silver",
-        "Innovative": "Yellow"
+        "Innovative": "Yellow",
+        "Influential": "Blue",
+        "Adventurous": "Green",
+        "Tough": "Maroon",
+        "Expressive": "Orange",
+        "Polished": "Pink",
+        "Selfless": "Purple",
+        "Playful": "Red",
+        "Independent": "Silver",
+        "Analytical": "Yellow",
+        "Achieve With Me": "Blue",
+        "Explore With Me": "Green",
+        "Strive With Me": "Maroon",
+        "Create With Me": "Orange",
+        "Refine With Me": "Pink",
+        "Care With Me": "Purple",
+        "Enjoy With Me": "Red",
+        "Defy With Me": "Silver",
+        "Invent With Me": "Yellow",
     }
 
     image_score_map = {
@@ -27,29 +45,27 @@ def personality_quiz():
         "BlueSet.jpg": "Blue",
         "GreenSet.jpg": "Green",
         "PinkSet.jpg": "Pink",
-        "BlackSet.jpg": "Silver"
+        "BlackSet.jpg": "Silver",
     }
 
-    color_priority = [
-        "Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"
-    ]
+    color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
     score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
 
     def run_quiz():
         for answer in selected_traits_q1:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q2]] += 1
+        score_counter[trait_score_map[selected_single_trait_q2[0]]] += 1
         for answer in least_represented_traits_q3:
             score_counter[trait_score_map[answer]] -= 1
         for answer in selected_traits_q4:
             score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q5]] += 1
+        score_counter[trait_score_map[selected_single_trait_q5[0]]] += 1
         for answer in least_represented_traits_q6:
             score_counter[trait_score_map[answer]] -= 1
         for image in selected_images_q7:
             score_counter[image_score_map[image]] += 1
-        score_counter[image_score_map[selected_image_q8]] += 1
+        score_counter[image_score_map[selected_image_q8[0]]] += 1
         for image in least_represented_images_q9:
             score_counter[image_score_map[image]] -= 1
         for mode in selected_modes_q10:
@@ -70,6 +86,7 @@ def personality_quiz():
             ("Blue", "Red"): "Coach",
             ("Blue", "Silver"): "Maverick",
             ("Blue", "Yellow"): "Visionary",
+            ("Blue", "Beige"): "Achiever",
             ("Maroon", "Blue"): "Contender",
             ("Maroon", "Green"): "Need to Find",
             ("Maroon", "Orange"): "Maker",
@@ -78,6 +95,7 @@ def personality_quiz():
             ("Maroon", "Red"): "Energizer",
             ("Maroon", "Silver"): "Dark Horse",
             ("Maroon", "Yellow"): "Challenger",
+            ("Maroon", "Beige"): "Competitor",
             ("Green", "Blue"): "Trailblazer",
             ("Green", "Maroon"): "Adventurer",
             ("Green", "Orange"): "Seeker",
@@ -86,6 +104,7 @@ def personality_quiz():
             ("Green", "Red"): "Globetrotter",
             ("Green", "Silver"): "Ranger",
             ("Green", "Yellow"): "Researcher",
+            ("Green", "Beige"): "Explorer",
             ("Orange", "Blue"): "Architect",
             ("Orange", "Maroon"): "Artisan",
             ("Orange", "Green"): "Searcher",
@@ -94,6 +113,7 @@ def personality_quiz():
             ("Orange", "Red"): "Storyteller",
             ("Orange", "Silver"): "Nonconformist",
             ("Orange", "Yellow"): "Ideator",
+            ("Orange", "Beige"): "Creator",
             ("Pink", "Blue"): "Connoisseur",
             ("Pink", "Maroon"): "Perfectionist",
             ("Pink", "Green"): "Philosopher",
@@ -102,6 +122,7 @@ def personality_quiz():
             ("Pink", "Red"): "Aficionado",
             ("Pink", "Silver"): "Refiner",
             ("Pink", "Yellow"): "Trendsetter",
+            ("Pink", "Beige"): "Sophisticate",
             ("Purple", "Blue"): "Guide",
             ("Purple", "Maroon"): "Guardian",
             ("Purple", "Green"): "Shepherd",
@@ -110,6 +131,7 @@ def personality_quiz():
             ("Purple", "Red"): "Host",
             ("Purple", "Silver"): "Advocate",
             ("Purple", "Yellow"): "Advisor",
+            ("Purple", "Beige"): "Provider",
             ("Red", "Blue"): "Motivator",
             ("Red", "Maroon"): "Dynamo",
             ("Red", "Green"): "Thrill-seeker",
@@ -118,6 +140,7 @@ def personality_quiz():
             ("Red", "Purple"): "Emcee",
             ("Red", "Silver"): "DaRedevil",
             ("Red", "Yellow"): "Magician",
+            ("Red", "Beige"): "Entertainer",
             ("Silver", "Blue"): "Ringleader",
             ("Silver", "Maroon"): "Instigator",
             ("Silver", "Green"): "Rogue",
@@ -267,7 +290,7 @@ def personality_quiz():
 
                     selected_images_q7 = []
 
-                    for i, file in enumerate(image_files_q7):
+                    for i, file in enumerate(image_files_q7[:3]):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -331,54 +354,33 @@ def personality_quiz():
                             st.write("---")
 
                             if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
-                                         "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
+                                st.write("Q10. Which of these modes of creative expression do you most relate to?")
                                 modes_q10 = [
-                                    "Action-oriented",
-                                    "Exciting",
-                                    "Friendly",
-                                    "Idealistic",
-                                    "Helpful",
-                                    "Intellectual",
-                                    "Positive",
-                                    "Powerful",
-                                    "Social"
+                                    "Achieve With Me",
+                                    "Explore With Me",
+                                    "Strive With Me",
+                                    "Create With Me",
+                                    "Refine With Me",
+                                    "Care With Me",
+                                    "Enjoy With Me",
+                                    "Defy With Me",
+                                    "Invent With Me"
                                 ]
 
-                                random.seed(42)
-                                random.shuffle(modes_q10)
-
-                                selected_modes_q10 = []
-
-                                for mode in modes_q10[:2]:
-                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
-                                    if selected:
-                                        selected_modes_q10.append(mode)
-
-                                if len(selected_modes_q10) != 2:
-                                    st.warning("Please select exactly 2 modes.")
+                                selected_modes_q10 = st.multiselect("", modes_q10, key="multiselect_q10")
 
                                 st.write("---")
 
-                                if len(selected_modes_q10) == 2:
+                                if selected_modes_q10:
+                                    st.write("Quiz Results:")
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
-                                    st.subheader("Your Top Two Colors:")
-                                    for color in top_two_colors:
-                                        st.markdown(f"<span style='color: {color.lower()}; font-size: 20px;'>{color}</span>",
-                                                    unsafe_allow_html=True)
+                                    st.write(f"Primary Color: {top_two_colors[0]}")
+                                    st.write(f"Secondary Color: {top_two_colors[1]}")
+                                    st.write(f"Persona Name: {persona_name}")
+                                    st.write(f"Score Counter: {score_counter}")
 
-                                    st.subheader("Your Persona:")
-                                    st.write(persona_name)
+    st.button("Submit")
 
-                                    st.subheader("Score Counter:")
-                                    st.write(score_counter)
 
-                                    st.write("---")
-
-                                    st.write("Thank you for taking the CollegeXpress Personality Survey!")
-
-    run_quiz()
-
-if __name__ == '__main__':
-    personality_quiz()
+personality_quiz()
