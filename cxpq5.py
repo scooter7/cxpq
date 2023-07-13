@@ -183,7 +183,7 @@ def personality_quiz():
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
-    for trait in traits:
+    for trait in traits[:3]:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -206,7 +206,7 @@ def personality_quiz():
         random.shuffle(remaining_traits_q3)
 
         least_represented_traits_q3 = []
-        for trait in remaining_traits_q3:
+        for trait in remaining_traits_q3[:3]:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
                 least_represented_traits_q3.append(trait)
@@ -235,7 +235,7 @@ def personality_quiz():
             random.shuffle(traits_q4)
 
             selected_traits_q4 = []
-            for trait in traits_q4:
+            for trait in traits_q4[:3]:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
@@ -259,7 +259,7 @@ def personality_quiz():
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
-                for trait in remaining_traits_q6:
+                for trait in remaining_traits_q6[:3]:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
                         least_represented_traits_q6.append(trait)
@@ -290,7 +290,7 @@ def personality_quiz():
 
                     selected_images_q7 = []
 
-                    for i, file in enumerate(image_files_q7):
+                    for i, file in enumerate(image_files_q7[:3]):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                         response = requests.get(image_url)
                         image = Image.open(BytesIO(response.content))
@@ -339,7 +339,7 @@ def personality_quiz():
 
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9):
+                            for i, file in enumerate(remaining_images_q9[:3]):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -367,17 +367,11 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                            for mode in modes_of_connection:
-                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
-                                    if selected:
-                                        selected_modes_q10.append(mode)
+                                selected_modes_q10 = st.multiselect("", modes_q10, key="multiselect_q10")
 
-                                    if len(selected_modes_q10) != 2:
-                                        st.warning("Please select exactly 2 modes.")
+                                st.write("---")
 
-                            st.write("---")
-
-                            if selected_modes_q10:
+                                if selected_modes_q10:
                                     st.write("Quiz Results:")
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
