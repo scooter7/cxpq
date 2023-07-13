@@ -355,6 +355,11 @@ def personality_quiz():
 
                             st.write("---")
 
+                            if len(least_represented_images_q9) != 3:
+                                st.warning("Please select exactly 3 images.")
+
+                            st.write("---")
+
                             if len(least_represented_images_q9) == 3:
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
                                          "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
@@ -411,3 +416,6 @@ def personality_quiz():
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
+
+
+personality_quiz()
