@@ -5,9 +5,8 @@ import requests
 from io import BytesIO
 import random
 
-def personality_quiz():
-    random.seed(123)
 
+def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
         "Curious": "Green",
@@ -52,7 +51,7 @@ def personality_quiz():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = Counter({color: 3 for color in color_priority})
+    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
 
     def run_quiz():
         for answer in selected_traits_q1:
@@ -167,7 +166,7 @@ def personality_quiz():
 
     st.title('CollegeXpress Personality Survey')
 
-    traits = [
+    traits_q1 = [
         "Confident",
         "Curious",
         "Determined",
@@ -179,12 +178,12 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.shuffle(traits)
+    random.seed(1)  # Set random seed for Q1 options
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
     selected_traits_q1 = []
-    for trait in traits:
+    for trait in traits_q1:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
         if selected:
             selected_traits_q1.append(trait)
@@ -195,13 +194,17 @@ def personality_quiz():
     st.write("---")
 
     if len(selected_traits_q1) == 3:
+        random.seed(2)  # Set random seed for Q2 options
+
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
         selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
-        remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
+        remaining_traits_q3 = [trait for trait in traits_q1 if trait not in selected_traits_q1]
+
+        random.seed(3)  # Set random seed for Q3 options
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -215,8 +218,6 @@ def personality_quiz():
         st.write("---")
 
         if len(least_represented_traits_q3) == 3:
-            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
-                     "Please select exactly 3 traits that best represent who you are.")
             traits_q4 = [
                 "Influential",
                 "Adventurous",
@@ -229,8 +230,10 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.shuffle(traits_q4)
+            random.seed(4)  # Set random seed for Q4 options
 
+            st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
+                     "Please select exactly 3 traits that best represent who you are.")
             selected_traits_q4 = []
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
@@ -243,12 +246,16 @@ def personality_quiz():
             st.write("---")
 
             if len(selected_traits_q4) == 3:
+                random.seed(5)  # Set random seed for Q5 options
+
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
                 selected_single_trait_q5 = st.radio("", selected_traits_q4, key="radio_q5")
 
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+
+                random.seed(6)  # Set random seed for Q6 options
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -264,6 +271,8 @@ def personality_quiz():
                 st.write("---")
 
                 if len(least_represented_traits_q6) == 3:
+                    random.seed(7)  # Set random seed for Q7 options
+
                     st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
                              "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
 
@@ -278,8 +287,6 @@ def personality_quiz():
                         "PinkSet.jpg",
                         "BlackSet.jpg"
                     ]
-
-                    random.shuffle(image_files_q7)
 
                     selected_images_q7 = []
 
@@ -298,6 +305,8 @@ def personality_quiz():
                     st.write("---")
 
                     if len(selected_images_q7) == 3:
+                        random.seed(8)  # Set random seed for Q8 options
+
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
 
                         selected_image_q8 = None
@@ -324,21 +333,22 @@ def personality_quiz():
                         st.write("---")
 
                         if selected_image_q8:
-                            st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
+                            random.seed(9)  # Set random seed for Q9 options
 
-                            random.shuffle(remaining_images_q9)
+                            st.write("Q9. Now think about this list and select the 3 groups of icons that "
+                                     "least represent who you are.")
 
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9):
-                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                                response = requests.get(image_url)
-                                image = Image.open(BytesIO(response.content))
-                                selected = st.checkbox("", key=f"q9_{i}")
-                                if selected:
-                                    least_represented_images_q9.append(file)
-                                st.image(image, use_column_width=True)
+                            for i, file in enumerate(image_files_q7):
+                                if file not in selected_images_q7:
+                                    image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                    response = requests.get(image_url)
+                                    image = Image.open(BytesIO(response.content))
+                                    selected = st.checkbox("", key=f"q9_{i}")
+                                    if selected:
+                                        least_represented_images_q9.append(file)
+                                    st.image(image, use_column_width=True)
 
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
@@ -346,8 +356,9 @@ def personality_quiz():
                             st.write("---")
 
                             if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Finally, here are 9 ways to get things done. "
-                                         "Select the 3 that are most like your style.")
+                                random.seed(10)  # Set random seed for Q10 options
+
+                                st.write("Q10. Now, please select the mode of communication that you prefer.")
 
                                 modes_q10 = [
                                     "Achieve With Me",
@@ -360,8 +371,6 @@ def personality_quiz():
                                     "Defy With Me",
                                     "Invent With Me"
                                 ]
-
-                                random.shuffle(modes_q10)
 
                                 selected_modes_q10 = []
 
@@ -376,49 +385,27 @@ def personality_quiz():
                                 st.write("---")
 
                                 if len(selected_modes_q10) == 3:
-                                    st.write("Calculating your results...")
                                     top_two_colors, persona_name, score_counter = run_quiz()
 
-                                    st.write("---")
+                                    st.write(f"Your top two colors are: {', '.join(top_two_colors)}")
 
-                                    st.header("Results")
-                                    st.write("Based on your responses, the top two colors that represent your personality are:")
-                                    st.write(f"1. {top_two_colors[0]}")
-                                    st.write(f"2. {top_two_colors[1]}")
+                                    persona_image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{persona_name}.jpg"
+                                    response = requests.get(persona_image_url)
+                                    persona_image = Image.open(BytesIO(response.content))
+                                    st.image(persona_image, use_column_width=True)
 
-                                    persona_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{persona_name}.jpg"
-                                    response = requests.get(persona_url)
-                                    image = Image.open(BytesIO(response.content))
-                                    st.image(image, use_column_width=True)
-
-                                    st.write(f"Your persona is **{persona_name}**!")
+                                    st.write(f"Your persona name is: {persona_name}")
 
                                     st.write("---")
 
-                                    st.subheader("Score Breakdown")
-                                    for color, count in score_counter.items():
-                                        st.write(f"{color}: {count}")
+                                    st.write("Score Counter:")
+                                    for color, score in score_counter.items():
+                                        st.write(f"{color}: {score}")
 
-    if len(selected_traits_q1) != 3:
-        st.warning("Please select exactly 3 traits.")
+    st.write("---")
 
-    if len(least_represented_traits_q3) != 3:
-        st.warning("Please select exactly 3 traits.")
-
-    if len(selected_traits_q4) != 3:
-        st.warning("Please select exactly 3 traits.")
-
-    if len(least_represented_traits_q6) != 3:
-        st.warning("Please select exactly 3 traits.")
-
-    if len(selected_images_q7) != 3:
-        st.warning("Please select exactly 3 images.")
-
-    if len(least_represented_images_q9) != 3:
-        st.warning("Please select exactly 3 images.")
-
-    if len(selected_modes_q10) != 3:
-        st.warning("Please select exactly 3 modes.")
+    st.write("Thank you for taking the CollegeXpress Personality Survey!")
+    st.write("Developed by OpenAI Intern, Streamlit Edition")
 
 
 personality_quiz()
