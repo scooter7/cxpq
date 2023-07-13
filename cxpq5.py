@@ -339,7 +339,7 @@ def personality_quiz():
 
                             least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9[:3]):
+                            for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
