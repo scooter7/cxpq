@@ -179,7 +179,7 @@ def personality_quiz():
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
-    random.seed(1)  # Set random seed for Q1 options
+    random.seed(7)  # Set random seed for Q1 options
     selected_traits_q1 = []
     for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
