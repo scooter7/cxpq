@@ -1,9 +1,9 @@
 import streamlit as st
 from PIL import Image
-import random
 from collections import Counter
 import requests
 from io import BytesIO
+import random
 
 def personality_quiz():
     trait_score_map = {
@@ -202,7 +202,6 @@ def personality_quiz():
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
         least_represented_traits_q3 = []
-        random.seed(3)  # Set random seed for Q3 options
         for trait in remaining_traits_q3:
             selected = st.checkbox(trait, key=f"checkbox_q3_{trait}")
             if selected:
@@ -229,7 +228,6 @@ def personality_quiz():
             ]
 
             selected_traits_q4 = []
-            random.seed(4)  # Set random seed for Q4 options
             for trait in traits_q4:
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
@@ -252,7 +250,6 @@ def personality_quiz():
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
                 least_represented_traits_q6 = []
-                random.seed(6)  # Set random seed for Q6 options
                 for trait in remaining_traits_q6:
                     selected = st.checkbox(trait, key=f"checkbox_q6_{trait}")
                     if selected:
@@ -305,6 +302,7 @@ def personality_quiz():
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
+                            random.seed(8 + i)  # Set random seed for Q8 options
                             selected = st.checkbox("", key=f"q8_{i}")
                             st.image(image, use_column_width=True)
                             if selected:
@@ -322,13 +320,12 @@ def personality_quiz():
 
                         st.write("---")
 
-                        if selected_image_q8:
-                            st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
+                        st.write("Q9. Now think about this page and select the 3 groups of icons that least represent who you are.")
 
-                            least_represented_images_q9 = []
+                        least_represented_images_q9 = []
 
-                            for i, file in enumerate(remaining_images_q9):
+                        for i, file in enumerate(image_files_q7):
+                            if file not in selected_images_q7:
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
@@ -338,70 +335,66 @@ def personality_quiz():
                                     least_represented_images_q9.append(file)
                                 st.image(image, use_column_width=True)
 
-                            if len(least_represented_images_q9) != 3:
-                                st.warning("Please select exactly 3 images.")
+                        if len(least_represented_images_q9) != 3:
+                            st.warning("Please select exactly 3 images.")
+
+                        st.write("---")
+
+                        if len(least_represented_images_q9) == 3:
+                            st.write("Q10. On this page, select up to 3 of the ways you most enjoy approaching your studies or solving problems.")
+
+                            modes = [
+                                "Achieve With Me",
+                                "Explore With Me",
+                                "Strive With Me",
+                                "Create With Me",
+                                "Refine With Me",
+                                "Care With Me",
+                                "Enjoy With Me",
+                                "Defy With Me",
+                                "Invent With Me"
+                            ]
+
+                            selected_modes_q10 = []
+
+                            for mode in modes:
+                                selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                if selected:
+                                    selected_modes_q10.append(mode)
+
+                            if len(selected_modes_q10) > 3:
+                                st.warning("Please select at most 3 modes.")
 
                             st.write("---")
 
-                            if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Lastly, of the 10 words below, please select the 3 that are most like you.")
+                            if len(selected_modes_q10) <= 3:
+                                st.write("Calculating your results...")
 
-                                modes_q10 = [
-                                    "Achieve With Me",
-                                    "Explore With Me",
-                                    "Strive With Me",
-                                    "Create With Me",
-                                    "Refine With Me",
-                                    "Care With Me",
-                                    "Enjoy With Me",
-                                    "Defy With Me",
-                                    "Invent With Me",
-                                    "Think With Me"
-                                ]
-
-                                selected_modes_q10 = []
-                                random.seed(10)  # Set random seed for Q10 options
-                                for mode in modes_q10:
-                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
-                                    if selected:
-                                        selected_modes_q10.append(mode)
-
-                                if len(selected_modes_q10) != 3:
-                                    st.warning("Please select exactly 3 modes.")
+                                top_two_colors, persona_name, score_counter = run_quiz()
 
                                 st.write("---")
 
-                                if len(selected_modes_q10) == 3:
-                                    st.write("Calculating your results...")
-                                    top_two_colors, persona_name, score_counter = run_quiz()
+                                st.write("Your Results:")
 
-                                    st.write("---")
-                                    st.write("Congratulations! Based on your answers, your top two personality colors are:")
-                                    st.write(top_two_colors[0])
-                                    st.write(top_two_colors[1])
-                                    st.write("---")
-                                    st.write(f"You are a {persona_name}!")
-                                    st.write("---")
-                                    st.write("Your personality color preferences:")
-                                    st.write(score_counter)
+                                for color, score in score_counter.items():
+                                    st.write(f"- {color}: {score} point(s)")
 
-                                    st.write("---")
-                                    st.write("About your personality colors:")
-                                    st.write("The CollegeXpress Personality Color System is based on an extensive research study"
-                                             " and has been refined over many years. Each color represents a unique combination"
-                                             " of personal qualities and characteristics that are important to you and those"
-                                             " around you. Understanding your personality colors can help you better"
-                                             " understand your own motivations, communication style, and areas of strength.")
+                                st.write("---")
 
-                                    st.write("---")
-                                    st.write("Disclaimer:")
-                                    st.write("Please note that the CollegeXpress Personality Color System is for"
-                                             " entertainment purposes only and should not be considered as a"
-                                             " comprehensive personality assessment. It is designed to provide"
-                                             " a fun and engaging way to explore different aspects of your personality.")
+                                st.write("Your Top Two Colors:")
+                                st.write(f"- {top_two_colors[0]}")
+                                st.write(f"- {top_two_colors[1]}")
 
-                                    st.button("Restart")
+                                st.write("---")
 
-    run_quiz()
+                                if persona_name:
+                                    st.write("Your Persona Name:")
+                                    st.write(persona_name)
+                                else:
+                                    st.warning("Oops! We couldn't find a persona name for your color combination. Please try again.")
+
+    st.write("---")
+
+    st.write("Thank you for taking the CollegeXpress Personality Survey!")
 
 personality_quiz()
