@@ -270,44 +270,43 @@ def personality_quiz():
                 st.write("---")
 
                 if len(least_represented_traits_q6) == 3:
-    st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
-             "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
+                    st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
+                             "Please take a moment to view all the groups. Then select the 3 that best represent who you are.")
 
-    image_files_q7 = [
-        "OrangeSet.jpg",
-        "BrownSet.jpg",
-        "RedSet.jpg",
-        "YellowSet.jpg",
-        "PurpleSet.jpg",
-        "BlueSet.jpg",
-        "GreenSet.jpg",
-        "PinkSet.jpg",
-        "BlackSet.jpg"
-    ]
+                    image_files_q7 = [
+                        "OrangeSet.jpg",
+                        "BrownSet.jpg",
+                        "RedSet.jpg",
+                        "YellowSet.jpg",
+                        "PurpleSet.jpg",
+                        "BlueSet.jpg",
+                        "GreenSet.jpg",
+                        "PinkSet.jpg",
+                        "BlackSet.jpg"
+                    ]
 
-    selected_images_q7 = []
+                    selected_images_q7 = []
 
-    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
+                    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
 
-    for i in range(0, len(image_files_q7), 3):
-        cols = st.beta_columns(3)
-        for j in range(3):
-            if i + j < len(image_files_q7):  # check if index exists
-                file = image_files_q7[i + j]
-                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                response = requests.get(image_url)
-                image = Image.open(BytesIO(response.content))
-                selected = cols[j].checkbox("", key=f"q7_{i+j}")
-                if selected:
-                    selected_images_q7.append(file)
-                cols[j].image(image, use_column_width=True)
+                    for i in range(0, len(image_files_q7), 3):
+                        cols = st.beta_columns(3)
+                        for j in range(3):
+                            if i + j < len(image_files_q7):  # check if index exists
+                                file = image_files_q7[i + j]
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = cols[j].checkbox("", key=f"q7_{i+j}")
+                                if selected:
+                                    selected_images_q7.append(file)
+                                cols[j].image(image, use_column_width=True)
 
-    if len(selected_images_q7) != 3:
-        st.warning("Please select exactly 3 images.")
+                    if len(selected_images_q7) != 3:
+                        st.warning("Please select exactly 3 images.")
 
-    st.write("---")
-
+                    st.write("---")
 
                     if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
@@ -320,106 +319,7 @@ def personality_quiz():
                             image = Image.open(BytesIO(response.content))
                             selected = st.checkbox("", key=f"q8_{i}")
                             st.image(image, use_column_width=True)
-                            if selected:
-                                if selected_image_q8:
-                                    st.warning("Please select only one image.")
-                                else:
-                                    selected_image_q8 = file
+                            ifThe code provided is a Streamlit application for a personality quiz. Users are asked a series of questions and make selections, and based on their responses, the application calculates their top two colors and generates a persona name.
 
-                        st.write("Your selected image: ")
-                        if selected_image_q8:
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
-                            response = requests.get(image_url)
-                            image = Image.open(BytesIO(response.content))
-                            st.image(image, use_column_width=True)
+To run this code, you need to have Streamlit installed. You can install it using pip:
 
-                        st.write("---")
-
-                        if selected_image_q8:
-                            st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
-
-                            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                            random.shuffle(remaining_images_q9)  # Randomize the order of remaining_images_q9
-
-                            least_represented_images_q9 = []
-
-                            for i, file in enumerate(remaining_images_q9):
-                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                                response = requests.get(image_url)
-                                image = Image.open(BytesIO(response.content))
-                                selected = st.checkbox("", key=f"q9_{i}")
-                                if selected:
-                                    least_represented_images_q9.append(file)
-                                st.image(image, use_column_width=True)
-
-                            if len(least_represented_images_q9) != 3:
-                                st.warning("Please select exactly 3 images.")
-
-                            st.write("---")
-
-                            if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
-                                         "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
-
-                                modes_of_connection = [
-                                    "Achieve With Me",
-                                    "Explore With Me",
-                                    "Strive With Me",
-                                    "Create With Me",
-                                    "Refine With Me",
-                                    "Care With Me",
-                                    "Enjoy With Me",
-                                    "Defy With Me",
-                                    "Invent With Me"
-                                ]
-
-                                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                                random.shuffle(modes_of_connection)  # Randomize the order of modes_of_connection
-
-                                selected_modes_q10 = []
-                                for mode in modes_of_connection:
-                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
-                                    if selected:
-                                        selected_modes_q10.append(mode)
-
-                                if len(selected_modes_q10) != 2:
-                                    st.warning("Please select exactly 2 modes.")
-
-                                st.write("---")
-
-                                st.write("Please click 'Submit' once you have completed the quiz.")
-                                if st.button("Submit"):
-                                    if len(selected_traits_q1) != 3:
-                                        st.warning("Please select exactly 3 traits for Q1.")
-                                    elif not selected_single_trait_q2:
-                                        st.warning("Please select a single trait for Q2.")
-                                    elif len(least_represented_traits_q3) != 3:
-                                        st.warning("Please select exactly 3 traits for Q3.")
-                                    elif len(selected_traits_q4) != 3:
-                                        st.warning("Please select exactly 3 traits for Q4.")
-                                    elif not selected_single_trait_q5:
-                                        st.warning("Please select a single trait for Q5.")
-                                    elif len(least_represented_traits_q6) != 3:
-                                        st.warning("Please select exactly 3 traits for Q6.")
-                                    elif len(selected_images_q7) != 3:
-                                        st.warning("Please select exactly 3 images for Q7.")
-                                    elif not selected_image_q8:
-                                        st.warning("Please select a single image for Q8.")
-                                    elif len(least_represented_images_q9) != 3:
-                                        st.warning("Please select exactly 3 images for Q9.")
-                                    elif len(selected_modes_q10) != 2:
-                                        st.warning("Please select exactly 2 modes for Q10.")
-                                    else:
-                                        top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
-                                        st.write("Total Scores for Each Color:")
-                                        for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
-
-# Set the random seed for each user session
-if 'random_seed' not in st.session_state:
-    st.session_state.random_seed = random.randint(0, 1000000)
-
-personality_quiz()
