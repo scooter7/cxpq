@@ -16,15 +16,6 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
-        "Influential": "Blue",
-        "Adventurous": "Green",
-        "Tough": "Maroon",
-        "Expressive": "Orange",
-        "Polished": "Pink",
-        "Selfless": "Purple",
-        "Playful": "Red",
-        "Independent": "Silver",
-        "Analytical": "Yellow",
         "Achieve With Me": "Blue",
         "Explore With Me": "Green",
         "Strive With Me": "Maroon",
@@ -50,7 +41,7 @@ def personality_quiz():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
+    score_counter = Counter({color: 3 for color in color_priority})
 
     def run_quiz():
         for answer in selected_traits_q1:
@@ -86,7 +77,6 @@ def personality_quiz():
             ("Blue", "Red"): "Coach",
             ("Blue", "Silver"): "Maverick",
             ("Blue", "Yellow"): "Visionary",
-            ("Blue", "Beige"): "Achiever",
             ("Maroon", "Blue"): "Contender",
             ("Maroon", "Green"): "Need to Find",
             ("Maroon", "Orange"): "Maker",
@@ -95,7 +85,6 @@ def personality_quiz():
             ("Maroon", "Red"): "Energizer",
             ("Maroon", "Silver"): "Dark Horse",
             ("Maroon", "Yellow"): "Challenger",
-            ("Maroon", "Beige"): "Competitor",
             ("Green", "Blue"): "Trailblazer",
             ("Green", "Maroon"): "Adventurer",
             ("Green", "Orange"): "Seeker",
@@ -104,7 +93,6 @@ def personality_quiz():
             ("Green", "Red"): "Globetrotter",
             ("Green", "Silver"): "Ranger",
             ("Green", "Yellow"): "Researcher",
-            ("Green", "Beige"): "Explorer",
             ("Orange", "Blue"): "Architect",
             ("Orange", "Maroon"): "Artisan",
             ("Orange", "Green"): "Searcher",
@@ -113,7 +101,6 @@ def personality_quiz():
             ("Orange", "Red"): "Storyteller",
             ("Orange", "Silver"): "Nonconformist",
             ("Orange", "Yellow"): "Ideator",
-            ("Orange", "Beige"): "Creator",
             ("Pink", "Blue"): "Connoisseur",
             ("Pink", "Maroon"): "Perfectionist",
             ("Pink", "Green"): "Philosopher",
@@ -122,7 +109,6 @@ def personality_quiz():
             ("Pink", "Red"): "Aficionado",
             ("Pink", "Silver"): "Refiner",
             ("Pink", "Yellow"): "Trendsetter",
-            ("Pink", "Beige"): "Sophisticate",
             ("Purple", "Blue"): "Guide",
             ("Purple", "Maroon"): "Guardian",
             ("Purple", "Green"): "Shepherd",
@@ -131,7 +117,6 @@ def personality_quiz():
             ("Purple", "Red"): "Host",
             ("Purple", "Silver"): "Advocate",
             ("Purple", "Yellow"): "Advisor",
-            ("Purple", "Beige"): "Provider",
             ("Red", "Blue"): "Motivator",
             ("Red", "Maroon"): "Dynamo",
             ("Red", "Green"): "Thrill-seeker",
@@ -140,7 +125,6 @@ def personality_quiz():
             ("Red", "Purple"): "Emcee",
             ("Red", "Silver"): "DaRedevil",
             ("Red", "Yellow"): "Magician",
-            ("Red", "Beige"): "Entertainer",
             ("Silver", "Blue"): "Ringleader",
             ("Silver", "Maroon"): "Instigator",
             ("Silver", "Green"): "Rogue",
@@ -149,7 +133,6 @@ def personality_quiz():
             ("Silver", "Purple"): "Activist",
             ("Silver", "Red"): "Rock Star",
             ("Silver", "Yellow"): "Free-thinker",
-            ("Silver", "Beige"): "Rebel",
             ("Yellow", "Blue"): "Vanguard",
             ("Yellow", "Maroon"): "Inventor",
             ("Yellow", "Green"): "Theorist",
@@ -158,7 +141,6 @@ def personality_quiz():
             ("Yellow", "Purple"): "Oracle",
             ("Yellow", "Red"): "Futurist",
             ("Yellow", "Silver"): "Reformer",
-            ("Yellow", "Beige"): "Innovator"
         }
 
         return persona_map.get((primary_color, secondary_color), "")
@@ -177,8 +159,8 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-    random.shuffle(traits)  # Randomize the order of traits
+    random.seed(st.session_state.get('random_seed', 0))
+    random.shuffle(traits)
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
@@ -194,15 +176,21 @@ def personality_quiz():
     st.write("---")
 
     if len(selected_traits_q1) == 3:
-        selected_single_trait_q2 = st.selectbox("Q2. Of the 3 traits you selected, which single trait is most like you?", options=["Select a trait"] + selected_traits_q1, index=0, key="select_q2")
+        selected_single_trait_q2 = st.selectbox(
+            "Q2. Of the 3 traits you selected, which single trait is most like you?",
+            options=["Select a trait"] + selected_traits_q1,
+            index=0,
+            key="select_q2",
+            font="inherit"
+        )
 
         st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-        random.shuffle(remaining_traits_q3)  # Randomize the order of remaining_traits_q3
+        random.seed(st.session_state.get('random_seed', 0))
+        random.shuffle(remaining_traits_q3)
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -230,8 +218,8 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-            random.shuffle(traits_q4)  # Randomize the order of traits_q4
+            random.seed(st.session_state.get('random_seed', 0))
+            random.shuffle(traits_q4)
 
             selected_traits_q4 = []
             for trait in traits_q4:
@@ -245,15 +233,20 @@ def personality_quiz():
             st.write("---")
 
             if len(selected_traits_q4) == 3:
-                selected_single_trait_q5 = st.selectbox("Q5. Of the 3 traits you selected, which single trait is most like you?", options=["Select a trait"] + selected_traits_q4, index=0, key="select_q5")
-
+                selected_single_trait_q5 = st.selectbox(
+                    "Q5. Of the 3 traits you selected, which single trait is most like you?",
+                    options=["Select a trait"] + selected_traits_q4,
+                    index=0,
+                    key="select_q5",
+                    font="inherit"
+                )
 
                 st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                random.shuffle(remaining_traits_q6)  # Randomize the order of remaining_traits_q6
+                random.seed(st.session_state.get('random_seed', 0))
+                random.shuffle(remaining_traits_q6)
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -286,8 +279,8 @@ def personality_quiz():
 
                     selected_images_q7 = []
 
-                    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
+                    random.seed(st.session_state.get('random_seed', 0))
+                    random.shuffle(image_files_q7)
 
                     for i, file in enumerate(image_files_q7):
                         image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
@@ -312,7 +305,7 @@ def personality_quiz():
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
-                            selected = st.radio("", ["", ""], key=f"radio_q8_{i}")
+                            selected = st.checkbox("", key=f"q8_{i}")
                             if selected:
                                 selected_image_q8 = file
                             st.image(image, use_column_width=True)
@@ -324,8 +317,8 @@ def personality_quiz():
 
                         remaining_images_q9 = [file for file in selected_images_q7 if file != selected_image_q8]
 
-                        random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                        random.shuffle(remaining_images_q9)  # Randomize the order of remaining_images_q9
+                        random.seed(st.session_state.get('random_seed', 0))
+                        random.shuffle(remaining_images_q9)
 
                         st.write("Q9. Now think about the remaining 2 groups of icons. "
                                  "Select the group that least represents who you are.")
@@ -363,8 +356,8 @@ def personality_quiz():
                             "Invent With Me"
                         ]
 
-                        random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                        random.shuffle(traits_q10)  # Randomize the order of traits_q10
+                        random.seed(st.session_state.get('random_seed', 0))
+                        random.shuffle(traits_q10)
 
                         for trait in traits_q10:
                             selected = st.checkbox(trait, key=f"checkbox_q10_{trait}")
