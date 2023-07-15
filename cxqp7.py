@@ -414,15 +414,16 @@ def personality_quiz():
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
                                         top_two_colors, persona_name, score_counter = run_quiz()
+                                        st.markdown("# Quiz Results")
                                         st.write("Your top two colors are: ", ", ".join(top_two_colors))
                                         st.write("Your persona name is: ", persona_name)
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
-                                        st.experimental_rerun()
+                                        st.markdown("---")
+                                        st.markdown("## Retake Quiz")
+                                        st.write("Click the button below to retake the quiz.")
+                                        if st.button("Retake Quiz"):
+                                            st.experimental_rerun()
 
-# Set the random seed for each user session
-if 'random_seed' not in st.session_state:
-    st.session_state.random_seed = random.randint(0, 1000000)
-
-personality_quiz()
+    personality_quiz()
