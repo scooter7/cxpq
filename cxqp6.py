@@ -291,7 +291,7 @@ def personality_quiz():
                     random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
 
                     for i in range(0, len(image_files_q7), 3):
-                        cols = st.beta_columns(3)
+                        cols = st.columns(3)
                         for j in range(3):
                             if i + j < len(image_files_q7):  # check if index exists
                                 file = image_files_q7[i + j]
