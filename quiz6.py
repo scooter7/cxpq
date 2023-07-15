@@ -191,13 +191,13 @@ def personality_quiz():
     if len(selected_traits_q1) != 3:
         st.warning("Please select exactly 3 traits.")
 
-        st.write("---")
+    st.write("---")
 
     if len(selected_traits_q1) == 3:
                 st.write("25. Of the 3 traits you selected, which single trait is most like you?")
                 selected_single_trait_q5 = st.selectbox("", selected_traits_q1, key="radio_q2")
 
-        st.write("---")
+    st.write("---")
 
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
@@ -214,7 +214,7 @@ def personality_quiz():
         if len(least_represented_traits_q3) != 3:
             st.warning("Please select exactly 3 traits.")
 
-        st.write("---")
+    st.write("---")
 
         if len(least_represented_traits_q3) == 3:
             st.write("Q4. Here is a new list of 9 traits that could make up your personality. "
@@ -240,13 +240,13 @@ def personality_quiz():
                 if selected:
                     selected_traits_q4.append(trait)
 
-            st.write("---")
+        st.write("---")
 
             if len(selected_traits_q4) == 3:
                 st.write("Q5. Of the 3 traits you selected, which single trait is most like you?")
                 selected_single_trait_q5 = st.selectbox("", selected_traits_q4, key="radio_q5")
 
-                st.write("---")
+        st.write("---")
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
@@ -264,7 +264,7 @@ def personality_quiz():
                 if len(least_represented_traits_q6) != 3:
                     st.warning("Please select exactly 3 traits.")
 
-                st.write("---")
+        st.write("---")
 
                 if len(least_represented_traits_q6) == 3:
                     st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
@@ -299,7 +299,7 @@ def personality_quiz():
                     if len(selected_images_q7) != 3:
                         st.warning("Please select exactly 3 images.")
 
-                    st.write("---")
+            st.write("---")
 
                     if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
@@ -325,7 +325,7 @@ def personality_quiz():
                             image = Image.open(BytesIO(response.content))
                             st.image(image, use_column_width=True)
 
-                        st.write("---")
+                st.write("---")
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
@@ -348,7 +348,7 @@ def personality_quiz():
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
 
-                            st.write("---")
+                    st.write("---")
 
                             if len(least_represented_images_q9) == 3:
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
@@ -378,7 +378,7 @@ def personality_quiz():
                                 if len(selected_modes_q10) != 2:
                                     st.warning("Please select exactly 2 modes.")
 
-                                st.write("---")
+                    st.write("---")
 
                                 st.write("Please click 'Submit' once you have completed the quiz.")
                                 if st.button("Submit"):
