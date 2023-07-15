@@ -16,6 +16,15 @@ def personality_quiz():
         "Enthusiastic": "Red",
         "Bold": "Silver",
         "Innovative": "Yellow",
+        "Influential": "Blue",
+        "Adventurous": "Green",
+        "Tough": "Maroon",
+        "Expressive": "Orange",
+        "Polished": "Pink",
+        "Selfless": "Purple",
+        "Playful": "Red",
+        "Independent": "Silver",
+        "Analytical": "Yellow",
         "Achieve With Me": "Blue",
         "Explore With Me": "Green",
         "Strive With Me": "Maroon",
@@ -77,6 +86,7 @@ def personality_quiz():
             ("Blue", "Red"): "Coach",
             ("Blue", "Silver"): "Maverick",
             ("Blue", "Yellow"): "Visionary",
+            ("Blue", "Beige"): "Achiever",
             ("Maroon", "Blue"): "Contender",
             ("Maroon", "Green"): "Need to Find",
             ("Maroon", "Orange"): "Maker",
@@ -85,6 +95,7 @@ def personality_quiz():
             ("Maroon", "Red"): "Energizer",
             ("Maroon", "Silver"): "Dark Horse",
             ("Maroon", "Yellow"): "Challenger",
+            ("Maroon", "Beige"): "Competitor",
             ("Green", "Blue"): "Trailblazer",
             ("Green", "Maroon"): "Adventurer",
             ("Green", "Orange"): "Seeker",
@@ -93,6 +104,7 @@ def personality_quiz():
             ("Green", "Red"): "Globetrotter",
             ("Green", "Silver"): "Ranger",
             ("Green", "Yellow"): "Researcher",
+            ("Green", "Beige"): "Explorer",
             ("Orange", "Blue"): "Architect",
             ("Orange", "Maroon"): "Artisan",
             ("Orange", "Green"): "Searcher",
@@ -101,6 +113,7 @@ def personality_quiz():
             ("Orange", "Red"): "Storyteller",
             ("Orange", "Silver"): "Nonconformist",
             ("Orange", "Yellow"): "Ideator",
+            ("Orange", "Beige"): "Creator",
             ("Pink", "Blue"): "Connoisseur",
             ("Pink", "Maroon"): "Perfectionist",
             ("Pink", "Green"): "Philosopher",
@@ -109,6 +122,7 @@ def personality_quiz():
             ("Pink", "Red"): "Aficionado",
             ("Pink", "Silver"): "Refiner",
             ("Pink", "Yellow"): "Trendsetter",
+            ("Pink", "Beige"): "Sophisticate",
             ("Purple", "Blue"): "Guide",
             ("Purple", "Maroon"): "Guardian",
             ("Purple", "Green"): "Shepherd",
@@ -117,6 +131,7 @@ def personality_quiz():
             ("Purple", "Red"): "Host",
             ("Purple", "Silver"): "Advocate",
             ("Purple", "Yellow"): "Advisor",
+            ("Purple", "Beige"): "Provider",
             ("Red", "Blue"): "Motivator",
             ("Red", "Maroon"): "Dynamo",
             ("Red", "Green"): "Thrill-seeker",
@@ -125,6 +140,7 @@ def personality_quiz():
             ("Red", "Purple"): "Emcee",
             ("Red", "Silver"): "DaRedevil",
             ("Red", "Yellow"): "Magician",
+            ("Red", "Beige"): "Entertainer",
             ("Silver", "Blue"): "Ringleader",
             ("Silver", "Maroon"): "Instigator",
             ("Silver", "Green"): "Rogue",
@@ -133,6 +149,7 @@ def personality_quiz():
             ("Silver", "Purple"): "Activist",
             ("Silver", "Red"): "Rock Star",
             ("Silver", "Yellow"): "Free-thinker",
+            ("Silver", "Beige"): "Rebel",
             ("Yellow", "Blue"): "Vanguard",
             ("Yellow", "Maroon"): "Inventor",
             ("Yellow", "Green"): "Theorist",
@@ -141,11 +158,10 @@ def personality_quiz():
             ("Yellow", "Purple"): "Oracle",
             ("Yellow", "Red"): "Futurist",
             ("Yellow", "Silver"): "Reformer",
+            ("Yellow", "Beige"): "Innovator"
         }
 
         return persona_map.get((primary_color, secondary_color), "")
-
-    st.title('CollegeXpress Personality Survey')
 
     traits = [
         "Confident",
@@ -162,8 +178,8 @@ def personality_quiz():
     random.seed(st.session_state.get('random_seed', 0))
     random.shuffle(traits)
 
-    st.write("Q1. Here is a list of 9 traits that could make up your personality. "
-             "Please select exactly 3 traits that best represent who you are.")
+    st.title('CollegeXpress Personality Survey')
+
     selected_traits_q1 = []
     for trait in traits:
         selected = st.checkbox(trait, key=f"checkbox_q1_{trait}")
@@ -180,8 +196,7 @@ def personality_quiz():
             "Q2. Of the 3 traits you selected, which single trait is most like you?",
             options=["Select a trait"] + selected_traits_q1,
             index=0,
-            key="select_q2",
-            font="inherit"
+            key="select_q2"
         )
 
         st.write("---")
@@ -237,8 +252,7 @@ def personality_quiz():
                     "Q5. Of the 3 traits you selected, which single trait is most like you?",
                     options=["Select a trait"] + selected_traits_q4,
                     index=0,
-                    key="select_q5",
-                    font="inherit"
+                    key="select_q5"
                 )
 
                 st.write("---")
