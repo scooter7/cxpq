@@ -5,7 +5,7 @@ import requests
 from io import BytesIO
 import random
 
-def main():
+def personality_quiz():
     trait_score_map = {
         "Confident": "Blue",
         "Curious": "Green",
@@ -50,7 +50,31 @@ def main():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = Counter({color: 3 for color in color_priority})
+    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
+
+    def run_quiz():
+        for answer in selected_traits_q1:
+            score_counter[trait_score_map[answer]] += 1
+        score_counter[trait_score_map[selected_single_trait_q2]] += 1
+        for answer in least_represented_traits_q3:
+            score_counter[trait_score_map[answer]] -= 1
+        for answer in selected_traits_q4:
+            score_counter[trait_score_map[answer]] += 1
+        score_counter[trait_score_map[selected_single_trait_q5]] += 1
+        for answer in least_represented_traits_q6:
+            score_counter[trait_score_map[answer]] -= 1
+        for image in selected_images_q7:
+            score_counter[image_score_map[image]] += 1
+        score_counter[image_score_map[selected_image_q8]] += 1
+        for image in least_represented_images_q9:
+            score_counter[image_score_map[image]] -= 1
+        for mode in selected_modes_q10:
+            score_counter[trait_score_map[mode]] += 1
+
+        sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
+        top_two_colors = [color for color, _ in sorted_scores[:2]]
+        persona_name = get_persona_name(top_two_colors[0], top_two_colors[1])
+        return top_two_colors, persona_name, score_counter
 
     def get_persona_name(primary_color, secondary_color):
         persona_map = {
@@ -136,30 +160,8 @@ def main():
             ("Yellow", "Silver"): "Reformer",
             ("Yellow", "Beige"): "Innovator"
         }
-        return persona_map.get((primary_color, secondary_color), "")
 
-    def run_quiz():
-        for answer in selected_traits_q1:
-            score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q2]] += 1
-        for answer in least_represented_traits_q3:
-            score_counter[trait_score_map[answer]] -= 1
-        for answer in selected_traits_q4:
-            score_counter[trait_score_map[answer]] += 1
-        score_counter[trait_score_map[selected_single_trait_q5]] += 1
-        for answer in least_represented_traits_q6:
-            score_counter[trait_score_map[answer]] -= 1
-        for image in selected_images_q7:
-            score_counter[image_score_map[image]] += 1
-        score_counter[image_score_map[selected_image_q8]] += 1
-        for image in least_represented_images_q9:
-            score_counter[image_score_map[image]] -= 1
-        for mode in selected_modes_q10:
-            score_counter[trait_score_map[mode]] += 1
-        sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
-        top_two_colors = [color for color, _ in sorted_scores[:2]]
-        persona_name = get_persona_name(top_two_colors[0], top_two_colors[1])
-        return top_two_colors, persona_name, score_counter
+        return persona_map.get((primary_color, secondary_color), "")
 
     st.title('CollegeXpress Personality Survey')
 
@@ -175,8 +177,8 @@ def main():
         "Innovative"
     ]
 
-    random.seed(st.session_state.get('random_seed', 0))
-    random.shuffle(traits)
+    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+    random.shuffle(traits)  # Randomize the order of traits
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
@@ -200,8 +202,8 @@ def main():
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        random.seed(st.session_state.get('random_seed', 0))
-        random.shuffle(remaining_traits_q3)
+        random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+        random.shuffle(remaining_traits_q3)  # Randomize the order of remaining_traits_q3
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -229,8 +231,8 @@ def main():
                 "Analytical"
             ]
 
-            random.seed(st.session_state.get('random_seed', 0))
-            random.shuffle(traits_q4)
+            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+            random.shuffle(traits_q4)  # Randomize the order of traits_q4
 
             selected_traits_q4 = []
             for trait in traits_q4:
@@ -251,8 +253,8 @@ def main():
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                random.seed(st.session_state.get('random_seed', 0))
-                random.shuffle(remaining_traits_q6)
+                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                random.shuffle(remaining_traits_q6)  # Randomize the order of remaining_traits_q6
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -266,7 +268,6 @@ def main():
                     st.warning("Please select exactly 3 traits.")
 
                 st.write("---")
-
 
                 if len(least_represented_traits_q6) == 3:
                     st.write("Q7. On this page there are 9 groups of icons meant to represent personalities. "
@@ -286,13 +287,13 @@ def main():
 
                     selected_images_q7 = []
 
-                    random.seed(st.session_state.get('random_seed', 0))
-                    random.shuffle(image_files_q7)
+                    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
 
                     for i in range(0, len(image_files_q7), 3):
                         cols = st.columns(3)
                         for j in range(3):
-                            if i + j < len(image_files_q7):
+                            if i + j < len(image_files_q7):  # check if index exists
                                 file = image_files_q7[i + j]
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
@@ -337,12 +338,12 @@ def main():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            random.seed(st.session_state.get('random_seed', 0))
-                            random.shuffle(remaining_images_q9)
+                            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                            random.shuffle(remaining_images_q9)  # Randomize the order of remaining_images_q9
 
                             least_represented_images_q9 = []
 
-                            cols_q9 = st.columns(3)
+                            cols_q9 = st.columns(3)  # Create 3 columns
 
                             for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
@@ -375,8 +376,8 @@ def main():
                                     "Invent With Me"
                                 ]
 
-                                random.seed(st.session_state.get('random_seed', 0))
-                                random.shuffle(modes_of_connection)
+                                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                                random.shuffle(modes_of_connection)  # Randomize the order of modes_of_connection
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
@@ -412,10 +413,16 @@ def main():
                                     elif len(selected_modes_q10) != 2:
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
-                                        top_two_colors, persona_name, scores = run_quiz()
-                                        st.write(f"Your top two colors are: {top_two_colors}")
-                                        st.write(f"Your persona name is: {persona_name}")
-                                        st.write(f"Your scores are: {scores}")
+                                        top_two_colors, persona_name, score_counter = run_quiz()
+                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                        st.write("Your persona name is: ", persona_name)
+                                        st.write("Total Scores for Each Color:")
+                                        for color in color_priority:
+                                            st.write(f"{color}: {score_counter[color]}")
+                                        st.experimental_rerun()
 
-if __name__ == "__main__":
-    main()
+# Set the random seed for each user session
+if 'random_seed' not in st.session_state:
+    st.session_state.random_seed = random.randint(0, 1000000)
+
+personality_quiz()
