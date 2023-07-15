@@ -191,7 +191,7 @@ def personality_quiz():
     if len(selected_traits_q1) != 3:
         st.warning("Please select exactly 3 traits.")
 
-    st.write("---")
+        st.write("---")
 
     if len(selected_traits_q1) == 3:
                 st.write("25. Of the 3 traits you selected, which single trait is most like you?")
