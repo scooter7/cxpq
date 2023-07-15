@@ -239,4 +239,5 @@ def personality_quiz():
 if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
 
-personality_quiz()
+if __name__ == "__main__":
+    personality_quiz()
