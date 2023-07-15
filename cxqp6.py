@@ -317,9 +317,73 @@ def personality_quiz():
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
-                            selected = st.checkbox("", key=f"q8_{i}")
+                            selected = st.radio("", [f"Group {i+1}"], key=f"radio_q8_{i}")
+                            if selected:
+                                selected_image_q8 = file
                             st.image(image, use_column_width=True)
-                            ifThe code provided is a Streamlit application for a personality quiz. Users are asked a series of questions and make selections, and based on their responses, the application calculates their top two colors and generates a persona name.
 
-To run this code, you need to have Streamlit installed. You can install it using pip:
+                        st.write("---")
 
+                        st.write("Q9. Now think about this list and select the 3 groups of icons that least represent who you are.")
+
+                        least_represented_images_q9 = []
+
+                        for file in image_files_q7:
+                            if file not in selected_images_q7:
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = st.checkbox("", key=f"checkbox_q9_{file}")
+                                if selected:
+                                    least_represented_images_q9.append(file)
+                                st.image(image, use_column_width=True)
+
+                        if len(least_represented_images_q9) != 3:
+                            st.warning("Please select exactly 3 images.")
+
+                        st.write("---")
+
+                        if len(least_represented_images_q9) == 3:
+                            st.write("Q10. Below is a list of modes of thinking. "
+                                     "Please select the 3 modes that best represent who you are.")
+
+                            selected_modes_q10 = []
+
+                            modes_q10 = [
+                                "Achieve With Me",
+                                "Explore With Me",
+                                "Strive With Me",
+                                "Create With Me",
+                                "Refine With Me",
+                                "Care With Me",
+                                "Enjoy With Me",
+                                "Defy With Me",
+                                "Invent With Me"
+                            ]
+
+                            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
+                            random.shuffle(modes_q10)  # Randomize the order of modes_q10
+
+                            for mode in modes_q10:
+                                selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
+                                if selected:
+                                    selected_modes_q10.append(mode)
+
+                            if len(selected_modes_q10) != 3:
+                                st.warning("Please select exactly 3 modes.")
+
+                            st.write("---")
+
+                            if len(selected_modes_q10) == 3:
+                                top_two_colors, persona_name, score_counter = run_quiz()
+
+                                st.title("Your CollegeXpress Personality")
+                                st.write(f"Your top two colors are: **{top_two_colors[0]}** and **{top_two_colors[1]}**")
+                                st.write(f"Your CollegeXpress Persona is: **{persona_name}**")
+                                st.write("Here is a breakdown of your scores:")
+                                for color, score in score_counter.items():
+                                    st.write(f"- {color}: {score}")
+
+                                st.write("---")
+
+    st.write("© 2023 CollegeXpress. All rights reserved.")
