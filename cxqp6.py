@@ -374,16 +374,38 @@ def personality_quiz():
 
                             st.write("---")
 
-                            if len(selected_modes_q10) == 3:
-                                top_two_colors, persona_name, score_counter = run_quiz()
+                            st.write("Please click 'Submit' once you have completed the quiz.")
+                                if st.button("Submit"):
+                                    if len(selected_traits_q1) != 3:
+                                        st.warning("Please select exactly 3 traits for Q1.")
+                                    elif not selected_single_trait_q2:
+                                        st.warning("Please select a single trait for Q2.")
+                                    elif len(least_represented_traits_q3) != 3:
+                                        st.warning("Please select exactly 3 traits for Q3.")
+                                    elif len(selected_traits_q4) != 3:
+                                        st.warning("Please select exactly 3 traits for Q4.")
+                                    elif not selected_single_trait_q5:
+                                        st.warning("Please select a single trait for Q5.")
+                                    elif len(least_represented_traits_q6) != 3:
+                                        st.warning("Please select exactly 3 traits for Q6.")
+                                    elif len(selected_images_q7) != 3:
+                                        st.warning("Please select exactly 3 images for Q7.")
+                                    elif not selected_image_q8:
+                                        st.warning("Please select a single image for Q8.")
+                                    elif len(least_represented_images_q9) != 3:
+                                        st.warning("Please select exactly 3 images for Q9.")
+                                    elif len(selected_modes_q10) != 2:
+                                        st.warning("Please select exactly 2 modes for Q10.")
+                                    else:
+                                        top_two_colors, persona_name, score_counter = run_quiz()
+                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                        st.write("Your persona name is: ", persona_name)
+                                        st.write("Total Scores for Each Color:")
+                                        for color in color_priority:
+                                            st.write(f"{color}: {score_counter[color]}")
 
-                                st.title("Your CollegeXpress Personality")
-                                st.write(f"Your top two colors are: **{top_two_colors[0]}** and **{top_two_colors[1]}**")
-                                st.write(f"Your CollegeXpress Persona is: **{persona_name}**")
-                                st.write("Here is a breakdown of your scores:")
-                                for color, score in score_counter.items():
-                                    st.write(f"- {color}: {score}")
+# Set the random seed for each user session
+if 'random_seed' not in st.session_state:
+    st.session_state.random_seed = random.randint(0, 1000000)
 
-                                st.write("---")
-
-    st.write("© 2023 CollegeXpress. All rights reserved.")
+personality_quiz()
