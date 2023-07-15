@@ -194,12 +194,8 @@ def personality_quiz():
     st.write("---")
 
     if len(selected_traits_q1) == 3:
-        selected_single_trait_q2 = st.selectbox(
-            "Q2. Of the 3 traits you selected, which single trait is most like you?",
-            options=["Select a trait"] + selected_traits_q1,
-            index=0,
-            key="select_q2"
-        )
+                st.write("25. Of the 3 traits you selected, which single trait is most like you?")
+                selected_single_trait_q5 = st.selectbox("", selected_traits_q1, key="radio_q2")
 
         st.write("---")
 
@@ -243,14 +239,6 @@ def personality_quiz():
                 selected = st.checkbox(trait, key=f"checkbox_q4_{trait}")
                 if selected:
                     selected_traits_q4.append(trait)
-
-            if len(selected_traits_q4) == 3:
-                selected_single_trait_q5 = st.selectbox(
-                    "Q5. Of the 3 traits you selected, which single trait is most like you?",
-                    options=["Select a trait"] + selected_traits_q4,
-                    index=0,
-                    key="select_q5"
-                )
 
             st.write("---")
 
