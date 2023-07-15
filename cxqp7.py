@@ -392,6 +392,9 @@ def personality_quiz():
 
                                 st.write("Please click 'Submit' once you have completed the quiz.")
                                 if st.button("Submit"):
+                                    # Clear the quiz content
+                                    st.caching.clear_cache()
+                                    st.text("")
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
                                     elif not selected_single_trait_q2:
@@ -419,8 +422,6 @@ def personality_quiz():
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
-                                        st.empty()  # Clear the quiz content
-
 
 # Set the random seed for each user session
 if 'random_seed' not in st.session_state:
