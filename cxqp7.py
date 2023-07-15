@@ -290,14 +290,18 @@ def personality_quiz():
                     random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
                     random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
 
-                    for i, file in enumerate(image_files_q7):
-                        image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                        response = requests.get(image_url)
-                        image = Image.open(BytesIO(response.content))
-                        selected = st.checkbox("", key=f"q7_{i}")
-                        if selected:
-                            selected_images_q7.append(file)
-                        st.image(image, use_column_width=True)
+                    for i in range(0, len(image_files_q7), 3):
+                        cols = st.columns(3)
+                        for j in range(3):
+                            if i + j < len(image_files_q7):  # check if index exists
+                                file = image_files_q7[i + j]
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = cols[j].checkbox("", key=f"q7_{i+j}")
+                                if selected:
+                                    selected_images_q7.append(file)
+                                cols[j].image(image, use_column_width=True)
 
                     if len(selected_images_q7) != 3:
                         st.warning("Please select exactly 3 images.")
@@ -339,19 +343,22 @@ def personality_quiz():
 
                             least_represented_images_q9 = []
 
+                            cols_q9 = st.columns(3)  # Create 3 columns
+
                             for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
                                 image = Image.open(BytesIO(response.content))
-                                selected = st.checkbox("", key=f"q9_{i}")
+                                selected = cols_q9[i % 3].checkbox("", key=f"q9_{i}")
                                 if selected:
                                     least_represented_images_q9.append(file)
-                                st.image(image, use_column_width=True)
+                                cols_q9[i % 3].image(image, use_column_width=True)
 
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
 
                             st.write("---")
+
 
                             if len(least_represented_images_q9) == 3:
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
@@ -412,8 +419,8 @@ def personality_quiz():
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
-                                        
                                         st.empty()  # Clear the quiz content
+
 
 # Set the random seed for each user session
 if 'random_seed' not in st.session_state:
