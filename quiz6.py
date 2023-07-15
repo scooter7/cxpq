@@ -195,7 +195,7 @@ def personality_quiz():
 
     if len(selected_traits_q1) == 3:
         st.write("Q2. Of the 3 traits you selected, which single trait is most like you?")
-        selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2", index=-1)
+        selected_single_trait_q2 = st.radio("", selected_traits_q1, key="radio_q2", index=None)
 
         st.write("---")
 
