@@ -317,7 +317,7 @@ def personality_quiz():
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
-                            selected = st.radio("", [f"Group {i+1}"], index=-1, key=f"radio_q8_{i}")
+                            selected = st.radio("", [f"Group {i+1}"], index=None, key=f"radio_q8_{i}")
                             if selected:
                                 selected_image_q8 = file
                         st.image(image, use_column_width=True)
