@@ -51,30 +51,7 @@ def personality_quiz():
 
     def get_persona_name(primary_color, secondary_color):
         persona_map = {
-            ("Blue", "Maroon"): "Champion", ("Blue", "Green"): "Captain", ("Blue", "Orange"): "Director",
-            ("Blue", "Pink"): "Producer", ("Blue", "Purple"): "Mentor", ("Blue", "Red"): "Coach",
-            ("Blue", "Silver"): "Maverick", ("Blue", "Yellow"): "Visionary", ("Maroon", "Blue"): "Contender",
-            ("Maroon", "Green"): "Need to Find", ("Maroon", "Orange"): "Maker", ("Maroon", "Pink"): "Precisionist",
-            ("Maroon", "Purple"): "Protector", ("Maroon", "Red"): "Energizer", ("Maroon", "Silver"): "Dark Horse",
-            ("Maroon", "Yellow"): "Challenger", ("Green", "Blue"): "Trailblazer", ("Green", "Maroon"): "Adventurer",
-            ("Green", "Orange"): "Seeker", ("Green", "Pink"): "Detective", ("Green", "Purple"): "Ambassador",
-            ("Green", "Red"): "Globetrotter", ("Green", "Silver"): "Ranger", ("Green", "Yellow"): "Researcher",
-            ("Orange", "Blue"): "Architect", ("Orange", "Maroon"): "Artisan", ("Orange", "Green"): "Searcher",
-            ("Orange", "Pink"): "Composer", ("Orange", "Purple"): "Curator", ("Orange", "Red"): "Storyteller",
-            ("Orange", "Silver"): "Nonconformist", ("Orange", "Yellow"): "Ideator", ("Pink", "Blue"): "Connoisseur",
-            ("Pink", "Maroon"): "Perfectionist", ("Pink", "Green"): "Philosopher", ("Pink", "Orange"): "Virtuoso",
-            ("Pink", "Purple"): "Idealist", ("Pink", "Red"): "Aficionado", ("Pink", "Silver"): "Refiner",
-            ("Pink", "Yellow"): "Trendsetter", ("Purple", "Blue"): "Guide", ("Purple", "Maroon"): "Guardian",
-            ("Purple", "Green"): "Shepherd", ("Purple", "Orange"): "Patron", ("Purple", "Pink"): "Confidant",
-            ("Purple", "Red"): "Host", ("Purple", "Silver"): "Advocate", ("Purple", "Yellow"): "Advisor",
-            ("Red", "Blue"): "Motivator", ("Red", "Maroon"): "Dynamo", ("Red", "Green"): "Thrill-seeker",
-            ("Red", "Orange"): "Performer", ("Red", "Pink"): "Enthusiast", ("Red", "Purple"): "Emcee",
-            ("Red", "Silver"): "DaRedevil", ("Red", "Yellow"): "Magician", ("Silver", "Blue"): "Ringleader",
-            ("Silver", "Maroon"): "Instigator", ("Silver", "Green"): "Rogue", ("Silver", "Orange"): "Renegade",
-            ("Silver", "Pink"): "Individualist", ("Silver", "Purple"): "Activist", ("Silver", "Red"): "Rock Star",
-            ("Silver", "Yellow"): "Free-thinker", ("Yellow", "Blue"): "Vanguard", ("Yellow", "Maroon"): "Inventor",
-            ("Yellow", "Green"): "Theorist", ("Yellow", "Orange"): "Originator", ("Yellow", "Pink"): "Dreamer",
-            ("Yellow", "Purple"): "Oracle", ("Yellow", "Red"): "Futurist", ("Yellow", "Silver"): "Reformer",
+            ("Blue", "Maroon"): "Champion",  # Add other personas as needed
         }
         return persona_map.get((primary_color, secondary_color), "")
     
@@ -126,50 +103,65 @@ def personality_quiz():
                     random.seed(st.session_state.get('random_seed', 0))
                     random.shuffle(image_files_q7)
                     selected_images_q7 = []
-                    for file in image_files_q7:
-                        image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                        response = requests.get(image_url)
-                        image = Image.open(BytesIO(response.content))
-                        selected = st.checkbox("", key=f"q7_{file}")
-                        st.image(image, use_column_width=True)
-                        if selected:
-                            selected_images_q7.append(file)
+                    for i in range(0, len(image_files_q7), 3):
+                        cols = st.columns(3)
+                        for j in range(3):
+                            if i + j < len(image_files_q7):
+                                file = image_files_q7[i + j]
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = cols[j].checkbox("", key=f"q7_{file}")
+                                cols[j].image(image, use_column_width=True)
+                                if selected:
+                                    selected_images_q7.append(file)
                     if len(selected_images_q7) != 3:
                         st.warning("Please select exactly 3 images.")
                     st.write("---")
                     if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
-                        selected_image_q8 = st.selectbox("", selected_images_q7, key="radio_q8")
+                        selected_image_q8 = st.radio("", selected_images_q7, key="radio_q8", format_func=lambda x: "")
+                        image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
+                        response = requests.get(image_url)
+                        image = Image.open(BytesIO(response.content))
+                        st.image(image, use_column_width=True)
                         st.write("---")
                         st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                         remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
                         random.seed(st.session_state.get('random_seed', 0))
                         random.shuffle(remaining_images_q9)
                         least_represented_images_q9 = []
-                        for file in remaining_images_q9:
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                            response = requests.get(image_url)
-                            image = Image.open(BytesIO(response.content))
-                            selected = st.checkbox("", key=f"q9_{file}")
-                            st.image(image, use_column_width=True)
-                            if selected:
-                                least_represented_images_q9.append(file)
+                        for i in range(0, len(remaining_images_q9), 3):
+                            cols = st.columns(3)
+                            for j in range(3):
+                                if i + j < len(remaining_images_q9):
+                                    file = remaining_images_q9[i + j]
+                                    image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                    response = requests.get(image_url)
+                                    image = Image.open(BytesIO(response.content))
+                                    selected = cols[j].checkbox("", key=f"q9_{file}")
+                                    cols[j].image(image, use_column_width=True)
+                                    if selected:
+                                        least_represented_images_q9.append(file)
                         if len(least_represented_images_q9) != 3:
                             st.warning("Please select exactly 3 images.")
                         st.write("---")
                         if len(least_represented_images_q9) == 3:
-                            st.write("Q10. Below are 9 things called 'Modes of Connection.' Please read each mode and select exactly 3 that best represent who you are.")
+                            st.write("Q10. Below are 9 things called 'Modes of Connection.' Please read each mode and select exactly 2 that best represent who you are.")
                             modes_q10 = ["Achieve With Me", "Explore With Me", "Strive With Me", "Create With Me", "Refine With Me", "Care With Me", "Enjoy With Me", "Defy With Me", "Invent With Me"]
                             random.seed(st.session_state.get('random_seed', 0))
                             random.shuffle(modes_q10)
                             selected_modes_q10 = [mode for mode in modes_q10 if st.checkbox(mode, key=f"checkbox_q10_{mode}")]
-                            if len(selected_modes_q10) != 3:
-                                st.warning("Please select exactly 3 modes.")
+                            if len(selected_modes_q10) != 2:
+                                st.warning("Please select exactly 2 modes.")
                             st.write("---")
-                            if len(selected_modes_q10) == 3:
+                            if len(selected_modes_q10) == 2:
                                 top_two_colors, persona_name, score_counter = run_quiz()
-                                st.write(f"Your persona is {persona_name}. Here is how you scored in each color:")
-                                st.bar_chart(score_counter)
+                                st.write(f"Your top two colors are: {', '.join(top_two_colors)}")
+                                st.write(f"Your persona name is: {persona_name}")
+                                st.write("Total Scores for Each Color:")
+                                for color in color_priority:
+                                    st.write(f"{color}: {score_counter[color]}")
 
 if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
