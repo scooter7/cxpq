@@ -45,11 +45,10 @@ def personality_quiz():
     email_address = st.text_input("Email Address")
     association = st.selectbox("Your Association", ["", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
     
-    if st.button("Submit"):
-        if not full_name or not email_address or not association or association == "":
-            st.warning("Please fill in your Full Name, Email Address, and Your Association.")
-        # Add other validations for Q1 to Q10 here
-        else:
+    # Validation: Check if all questions have been answered and required fields are filled
+    if (full_name and email_address and association and association != ""):
+        # If all validations pass, render the 'Submit' button
+        if st.button("Submit"):
             # Run the quiz and gather the results
             top_two_colors, persona_name, score_counter = run_quiz()
             
@@ -72,6 +71,8 @@ def personality_quiz():
             st.write("Total Scores for Each Color:")
             for color in color_priority:
                 st.write(f"{color}: {score_counter[color]}")
+    else:
+        st.warning("Please answer all questions and fill in your Full Name, Email Address, and Your Association before submitting.")
 
 # Set the random seed for each user session
 if 'random_seed' not in st.session_state:
