@@ -53,7 +53,7 @@ image_score_map = {
 color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 score_counter = Counter({color: 3 for color in color_priority})
 def run_quiz():
-for answer in selected_traits_q1:
+    for answer in selected_traits_q1:
 score_counter[trait_score_map[answer]] += 1
 score_counter[trait_score_map[selected_single_trait_q2]] += 1
 for answer in least_represented_traits_q3:
@@ -385,7 +385,7 @@ csv_buffer = StringIO()
 all_responses_df.to_csv(csv_buffer, index=False)
 s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 def run_quiz():
-for answer in selected_traits_q1:
+    for answer in selected_traits_q1:
 score_counter[trait_score_map[answer]] += 1
 score_counter[trait_score_map[selected_single_trait_q2]] += 1
 for answer in least_represented_traits_q3:
@@ -714,7 +714,7 @@ timestamp_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 unique_id_str = str(uuid.uuid4())
 object_key = f"responses/{timestamp_str}_{unique_id_str}.csv"
 def run_quiz():
-for answer in selected_traits_q1:
+    for answer in selected_traits_q1:
 score_counter[trait_score_map[answer]] += 1
 score_counter[trait_score_map[selected_single_trait_q2]] += 1
 for answer in least_represented_traits_q3:
@@ -1097,7 +1097,7 @@ image_score_map = {
 color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 score_counter = Counter({color: 3 for color in color_priority})
 def run_quiz():
-for answer in selected_traits_q1:
+    for answer in selected_traits_q1:
 score_counter[trait_score_map[answer]] += 1
 score_counter[trait_score_map[selected_single_trait_q2]] += 1
 for answer in least_represented_traits_q3:
@@ -1429,7 +1429,7 @@ csv_buffer = StringIO()
 all_responses_df.to_csv(csv_buffer, index=False)
 s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 def run_quiz():
-for answer in selected_traits_q1:
+    for answer in selected_traits_q1:
 score_counter[trait_score_map[answer]] += 1
 score_counter[trait_score_map[selected_single_trait_q2]] += 1
 for answer in least_represented_traits_q3:
