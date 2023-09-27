@@ -24,14 +24,9 @@ def upload_responses_to_s3(responses):
     unique_id_str = str(uuid.uuid4())
     object_key = f"responses/{timestamp_str}_{unique_id_str}.csv"
     
-    # Convert the responses dictionary to DataFrame
     df = pd.DataFrame([responses])
-    
-    # Write DataFrame to StringIO object
     csv_buffer = StringIO()
     df.to_csv(csv_buffer, index=False)
-    
-    # Upload CSV to S3
     s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 
 def personality_quiz():
@@ -45,7 +40,7 @@ def personality_quiz():
     
     # (existing UI elements for Q1 to Q10)
     
-    # New Input Fields and Submit Button
+    # New Input Fields
     full_name = st.text_input("Full Name")
     email_address = st.text_input("Email Address")
     association = st.selectbox("Your Association", ["", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
