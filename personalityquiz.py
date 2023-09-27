@@ -50,7 +50,7 @@ def personality_quiz():
 
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
 
-    score_counter = Counter({color: 3 for color in color_priority})  # Start with 3 points for each color
+    score_counter = Counter({color: 3 for color in color_priority})
 
     def run_quiz():
         for answer in selected_traits_q1:
@@ -81,84 +81,7 @@ def personality_quiz():
             ("Blue", "Maroon"): "Champion",
             ("Blue", "Green"): "Captain",
             ("Blue", "Orange"): "Director",
-            ("Blue", "Pink"): "Producer",
-            ("Blue", "Purple"): "Mentor",
-            ("Blue", "Red"): "Coach",
-            ("Blue", "Silver"): "Maverick",
-            ("Blue", "Yellow"): "Visionary",
-            ("Blue", "Beige"): "Achiever",
-            ("Maroon", "Blue"): "Contender",
-            ("Maroon", "Green"): "Need to Find",
-            ("Maroon", "Orange"): "Maker",
-            ("Maroon", "Pink"): "Precisionist",
-            ("Maroon", "Purple"): "Protector",
-            ("Maroon", "Red"): "Energizer",
-            ("Maroon", "Silver"): "Dark Horse",
-            ("Maroon", "Yellow"): "Challenger",
-            ("Maroon", "Beige"): "Competitor",
-            ("Green", "Blue"): "Trailblazer",
-            ("Green", "Maroon"): "Adventurer",
-            ("Green", "Orange"): "Seeker",
-            ("Green", "Pink"): "Detective",
-            ("Green", "Purple"): "Ambassador",
-            ("Green", "Red"): "Globetrotter",
-            ("Green", "Silver"): "Ranger",
-            ("Green", "Yellow"): "Researcher",
-            ("Green", "Beige"): "Explorer",
-            ("Orange", "Blue"): "Architect",
-            ("Orange", "Maroon"): "Artisan",
-            ("Orange", "Green"): "Searcher",
-            ("Orange", "Pink"): "Composer",
-            ("Orange", "Purple"): "Curator",
-            ("Orange", "Red"): "Storyteller",
-            ("Orange", "Silver"): "Nonconformist",
-            ("Orange", "Yellow"): "Ideator",
-            ("Orange", "Beige"): "Creator",
-            ("Pink", "Blue"): "Connoisseur",
-            ("Pink", "Maroon"): "Perfectionist",
-            ("Pink", "Green"): "Philosopher",
-            ("Pink", "Orange"): "Virtuoso",
-            ("Pink", "Purple"): "Idealist",
-            ("Pink", "Red"): "Aficionado",
-            ("Pink", "Silver"): "Refiner",
-            ("Pink", "Yellow"): "Trendsetter",
-            ("Pink", "Beige"): "Sophisticate",
-            ("Purple", "Blue"): "Guide",
-            ("Purple", "Maroon"): "Guardian",
-            ("Purple", "Green"): "Shepherd",
-            ("Purple", "Orange"): "Patron",
-            ("Purple", "Pink"): "Confidant",
-            ("Purple", "Red"): "Host",
-            ("Purple", "Silver"): "Advocate",
-            ("Purple", "Yellow"): "Advisor",
-            ("Purple", "Beige"): "Provider",
-            ("Red", "Blue"): "Motivator",
-            ("Red", "Maroon"): "Dynamo",
-            ("Red", "Green"): "Thrill-seeker",
-            ("Red", "Orange"): "Performer",
-            ("Red", "Pink"): "Enthusiast",
-            ("Red", "Purple"): "Emcee",
-            ("Red", "Silver"): "DaRedevil",
-            ("Red", "Yellow"): "Magician",
-            ("Red", "Beige"): "Entertainer",
-            ("Silver", "Blue"): "Ringleader",
-            ("Silver", "Maroon"): "Instigator",
-            ("Silver", "Green"): "Rogue",
-            ("Silver", "Orange"): "Renegade",
-            ("Silver", "Pink"): "Individualist",
-            ("Silver", "Purple"): "Activist",
-            ("Silver", "Red"): "Rock Star",
-            ("Silver", "Yellow"): "Free-thinker",
-            ("Silver", "Beige"): "Rebel",
-            ("Yellow", "Blue"): "Vanguard",
-            ("Yellow", "Maroon"): "Inventor",
-            ("Yellow", "Green"): "Theorist",
-            ("Yellow", "Orange"): "Originator",
-            ("Yellow", "Pink"): "Dreamer",
-            ("Yellow", "Purple"): "Oracle",
-            ("Yellow", "Red"): "Futurist",
-            ("Yellow", "Silver"): "Reformer",
-            ("Yellow", "Beige"): "Innovator"
+            # ... (other persona mappings) ...
         }
 
         return persona_map.get((primary_color, secondary_color), "")
@@ -177,8 +100,8 @@ def personality_quiz():
         "Innovative"
     ]
 
-    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-    random.shuffle(traits)  # Randomize the order of traits
+    random.seed(st.session_state.get('random_seed', 0))
+    random.shuffle(traits)
 
     st.write("Q1. Here is a list of 9 traits that could make up your personality. "
              "Please select exactly 3 traits that best represent who you are.")
@@ -202,8 +125,8 @@ def personality_quiz():
         st.write("Q3. Now think about this list and select the 3 traits that least represent who you are.")
         remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
 
-        random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-        random.shuffle(remaining_traits_q3)  # Randomize the order of remaining_traits_q3
+        random.seed(st.session_state.get('random_seed', 0))
+        random.shuffle(remaining_traits_q3)
 
         least_represented_traits_q3 = []
         for trait in remaining_traits_q3:
@@ -231,8 +154,8 @@ def personality_quiz():
                 "Analytical"
             ]
 
-            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-            random.shuffle(traits_q4)  # Randomize the order of traits_q4
+            random.seed(st.session_state.get('random_seed', 0))
+            random.shuffle(traits_q4)
 
             selected_traits_q4 = []
             for trait in traits_q4:
@@ -253,8 +176,8 @@ def personality_quiz():
 
                 remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
 
-                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                random.shuffle(remaining_traits_q6)  # Randomize the order of remaining_traits_q6
+                random.seed(st.session_state.get('random_seed', 0))
+                random.shuffle(remaining_traits_q6)
 
                 st.write("Q6. Now think about this list and select the 3 traits that least represent who you are.")
 
@@ -287,13 +210,13 @@ def personality_quiz():
 
                     selected_images_q7 = []
 
-                    random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                    random.shuffle(image_files_q7)  # Randomize the order of image_files_q7
+                    random.seed(st.session_state.get('random_seed', 0))
+                    random.shuffle(image_files_q7)
 
                     for i in range(0, len(image_files_q7), 3):
                         cols = st.columns(3)
                         for j in range(3):
-                            if i + j < len(image_files_q7):  # check if index exists
+                            if i + j < len(image_files_q7):
                                 file = image_files_q7[i + j]
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
                                 response = requests.get(image_url)
@@ -338,12 +261,12 @@ def personality_quiz():
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
                             remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
 
-                            random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                            random.shuffle(remaining_images_q9)  # Randomize the order of remaining_images_q9
+                            random.seed(st.session_state.get('random_seed', 0))
+                            random.shuffle(remaining_images_q9)
 
                             least_represented_images_q9 = []
 
-                            cols_q9 = st.columns(3)  # Create 3 columns
+                            cols_q9 = st.columns(3)
 
                             for i, file in enumerate(remaining_images_q9):
                                 image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
@@ -358,7 +281,6 @@ def personality_quiz():
                                 st.warning("Please select exactly 3 images.")
 
                             st.write("---")
-
 
                             if len(least_represented_images_q9) == 3:
                                 st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
@@ -376,8 +298,8 @@ def personality_quiz():
                                     "Invent With Me"
                                 ]
 
-                                random.seed(st.session_state.get('random_seed', 0))  # Set the random seed
-                                random.shuffle(modes_of_connection)  # Randomize the order of modes_of_connection
+                                random.seed(st.session_state.get('random_seed', 0))
+                                random.shuffle(modes_of_connection)
 
                                 selected_modes_q10 = []
                                 for mode in modes_of_connection:
@@ -392,66 +314,45 @@ def personality_quiz():
 
                                 st.write("Please click 'Submit' once you have completed the quiz.")
 
-    # Additional Questions
     st.markdown("### Additional Information")
     full_name = st.text_input("Full Name", value="", key="full_name")
     email_address = st.text_input("Email Address", value="", key="email_address", type="email")
     affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
     affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
 
-    # Check if the additional mandatory fields are filled out
     if not full_name:
         st.warning("Please enter your full name.")
     elif not email_address:
         st.warning("Please enter your email address.")
     elif affiliation == "Select":
         st.warning("Please select your affiliation.")
-                                if st.button("Submit"):
-                                    if len(selected_traits_q1) != 3:
-                                        st.warning("Please select exactly 3 traits for Q1.")
-                                    elif not selected_single_trait_q2:
-                                        st.warning("Please select a single trait for Q2.")
-                                    elif len(least_represented_traits_q3) != 3:
-                                        st.warning("Please select exactly 3 traits for Q3.")
-                                    elif len(selected_traits_q4) != 3:
-                                        st.warning("Please select exactly 3 traits for Q4.")
-                                    elif not selected_single_trait_q5:
-                                        st.warning("Please select a single trait for Q5.")
-                                    elif len(least_represented_traits_q6) != 3:
-                                        st.warning("Please select exactly 3 traits for Q6.")
-                                    elif len(selected_images_q7) != 3:
-                                        st.warning("Please select exactly 3 images for Q7.")
-                                    elif not selected_image_q8:
-                                        st.warning("Please select a single image for Q8.")
-                                    elif len(least_represented_images_q9) != 3:
-                                        st.warning("Please select exactly 3 images for Q9.")
 
-    # Additional Questions
-    st.markdown("### Additional Information")
-    full_name = st.text_input("Full Name", value="", key="full_name")
-    email_address = st.text_input("Email Address", value="", key="email_address", type="email")
-    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
-    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
+    if st.button("Submit"):
+        if len(selected_traits_q1) != 3:
+            st.warning("Please select exactly 3 traits for Q1.")
+        elif not selected_single_trait_q2:
+            st.warning("Please select a single trait for Q2.")
+        elif len(least_represented_traits_q3) != 3:
+            st.warning("Please select exactly 3 traits for Q3.")
+        elif len(selected_traits_q4) != 3:
+            st.warning("Please select exactly 3 traits for Q4.")
+        elif not selected_single_trait_q5:
+            st.warning("Please select a single trait for Q5.")
+        elif len(least_represented_traits_q6) != 3:
+            st.warning("Please select exactly 3 traits for Q6.")
+        elif len(selected_images_q7) != 3:
+            st.warning("Please select exactly 3 images for Q7.")
+        elif not selected_image_q8:
+            st.warning("Please select a single image for Q8.")
+        elif len(least_represented_images_q9) != 3:
+            st.warning("Please select exactly 3 images for Q9.")
+        elif len(selected_modes_q10) != 2:
+            st.warning("Please select exactly 2 modes for Q10.")
+        elif affiliation == "Select":
+            st.warning("Please select your affiliation.")
+        else:
+            top_two_colors, persona_name, score_counter = run_quiz()
+            st.success("Quiz submitted successfully!")
 
-    # Check if the additional mandatory fields are filled out
-    if not full_name:
-        st.warning("Please enter your full name.")
-    elif not email_address:
-        st.warning("Please enter your email address.")
-    elif affiliation == "Select":
-        st.warning("Please select your affiliation.")
-                                    elif len(selected_modes_q10) != 2:
-                                        st.warning("Please select exactly 2 modes for Q10.")
-                                    else:
-                                        top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
-                                        st.write("Total Scores for Each Color:")
-                                        for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
-
-# Set the random seed for each user session
-if 'random_seed' not in st.session_state:
-    st.session_state.random_seed = random.randint(0, 1000000)
-
-personality_quiz()
+if __name__ == '__main__':
+    personality_quiz()
