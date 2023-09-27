@@ -391,6 +391,21 @@ def personality_quiz():
                                 st.write("---")
 
                                 st.write("Please click 'Submit' once you have completed the quiz.")
+
+    # Additional Questions
+    st.markdown("### Additional Information")
+    full_name = st.text_input("Full Name", value="", key="full_name")
+    email_address = st.text_input("Email Address", value="", key="email_address", type="email")
+    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
+    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
+
+    # Check if the additional mandatory fields are filled out
+    if not full_name:
+        st.warning("Please enter your full name.")
+    elif not email_address:
+        st.warning("Please enter your email address.")
+    elif affiliation == "Select":
+        st.warning("Please select your affiliation.")
                                 if st.button("Submit"):
                                     if len(selected_traits_q1) != 3:
                                         st.warning("Please select exactly 3 traits for Q1.")
@@ -410,6 +425,21 @@ def personality_quiz():
                                         st.warning("Please select a single image for Q8.")
                                     elif len(least_represented_images_q9) != 3:
                                         st.warning("Please select exactly 3 images for Q9.")
+
+    # Additional Questions
+    st.markdown("### Additional Information")
+    full_name = st.text_input("Full Name", value="", key="full_name")
+    email_address = st.text_input("Email Address", value="", key="email_address", type="email")
+    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
+    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
+
+    # Check if the additional mandatory fields are filled out
+    if not full_name:
+        st.warning("Please enter your full name.")
+    elif not email_address:
+        st.warning("Please enter your email address.")
+    elif affiliation == "Select":
+        st.warning("Please select your affiliation.")
                                     elif len(selected_modes_q10) != 2:
                                         st.warning("Please select exactly 2 modes for Q10.")
                                     else:
@@ -425,18 +455,3 @@ if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
 
 personality_quiz()
-    # Additional Questions
-    st.markdown("### Additional Information")
-    full_name = st.text_input("Full Name", value="", key="full_name")
-    email_address = st.text_input("Email Address", value="", key="email_address", type="email")
-    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
-    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
-
-    # Check if the additional mandatory fields are filled out
-    if not full_name:
-        st.warning("Please enter your full name.")
-    elif not email_address:
-        st.warning("Please enter your email address.")
-    elif affiliation == "Select":
-        st.warning("Please select your affiliation.")
-
