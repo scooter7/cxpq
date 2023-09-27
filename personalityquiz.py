@@ -310,29 +310,22 @@ def personality_quiz():
 
                     if len(selected_images_q7) == 3:
                         st.write("Q8. Of the 3 you selected, which group of icons is most like you?")
+                        selected_image_q8 = st.selectbox("Select one image", selected_images_q7, format_func=lambda x: 'Image ' + str(selected_images_q7.index(x) + 1), key="radio_q8")
+    
+                    for file in selected_images_q7:
+                        image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                        response = requests.get(image_url)
+                        image = Image.open(BytesIO(response.content))
+                        st.image(image, use_column_width=True)
+        
+                    st.write("Your selected image: ")
+                    if selected_image_q8:
+                        image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
+                        response = requests.get(image_url)
+                        image = Image.open(BytesIO(response.content))
+                        st.image(image, use_column_width=True)
 
-                        selected_image_q8 = None
-
-                        for i, file in enumerate(selected_images_q7):
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                            response = requests.get(image_url)
-                            image = Image.open(BytesIO(response.content))
-                            selected = st.checkbox("", key=f"q8_{i}")
-                            st.image(image, use_column_width=True)
-                            if selected:
-                                if selected_image_q8:
-                                    st.warning("Please select only one image.")
-                                else:
-                                    selected_image_q8 = file
-
-                        st.write("Your selected image: ")
-                        if selected_image_q8:
-                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
-                            response = requests.get(image_url)
-                            image = Image.open(BytesIO(response.content))
-                            st.image(image, use_column_width=True)
-
-                        st.write("---")
+                    st.write("---")
 
                         if selected_image_q8:
                             st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
