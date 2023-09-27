@@ -10,7 +10,7 @@ import requests
 from io import BytesIO
 import random
 def personality_quiz():
-trait_score_map = {
+    trait_score_map = {
 "Confident": "Blue",
 "Curious": "Green",
 "Determined": "Maroon",
@@ -1054,7 +1054,7 @@ import requests
 from io import BytesIO
 import random
 def personality_quiz():
-trait_score_map = {
+    trait_score_map = {
 "Confident": "Blue",
 "Curious": "Green",
 "Determined": "Maroon",
