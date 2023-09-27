@@ -331,82 +331,83 @@ def personality_quiz():
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             st.image(image, use_column_width=True)
+                        else:
+                            st.info("Please select an image.")
 
                         st.write("---")
 
-                        if selected_image_q8:
-                            st.write("Q9. Now think about these icon groups remaining and select the 3 that least represent who you are.")
-                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
+                        st.write("Q9. Now think about this list and select the 3 groups of icons that least represent who you are.")
+                        remaining_images_q9 = [image for image in image_files_q7 if image not in selected_images_q7]
+
+                        least_represented_images_q9 = []
+
+                        random.seed(st.session_state.get('random_seed', 0))
+                        random.shuffle(remaining_images_q9)
+
+                        for i in range(0, len(remaining_images_q9), 3):
+                            cols = st.columns(3)
+                            for j in range(3):
+                                if i + j < len(remaining_images_q9):
+                                    file = remaining_images_q9[i + j]
+                                    image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                    response = requests.get(image_url)
+                                    image = Image.open(BytesIO(response.content))
+                                    selected = cols[j].checkbox("", key=f"q9_{i+j}")
+                                    if selected:
+                                        least_represented_images_q9.append(file)
+                                    cols[j].image(image, use_column_width=True)
+
+                        if len(least_represented_images_q9) != 3:
+                            st.warning("Please select exactly 3 images.")
+
+                        st.write("---")
+
+                        if len(least_represented_images_q9) == 3:
+                            st.write("Q10. Finally, think about your personality and your "
+                                     "ability to adapt to a college setting. What mode best describes you?")
+                            modes_q10 = [
+                                "Achieve With Me",
+                                "Explore With Me",
+                                "Strive With Me",
+                                "Create With Me",
+                                "Refine With Me",
+                                "Care With Me",
+                                "Enjoy With Me",
+                                "Defy With Me",
+                                "Invent With Me"
+                            ]
 
                             random.seed(st.session_state.get('random_seed', 0))
-                            random.shuffle(remaining_images_q9)
+                            random.shuffle(modes_q10)
 
-                            least_represented_images_q9 = []
+                            selected_modes_q10 = st.multiselect("", modes_q10)
 
-                            cols_q9 = st.columns(3)
-
-                            for i, file in enumerate(remaining_images_q9):
-                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
-                                response = requests.get(image_url)
-                                image = Image.open(BytesIO(response.content))
-                                selected = cols_q9[i % 3].checkbox("", key=f"q9_{i}")
-                                if selected:
-                                    least_represented_images_q9.append(file)
-                                cols_q9[i % 3].image(image, use_column_width=True)
-
-                            if len(least_represented_images_q9) != 3:
-                                st.warning("Please select exactly 3 images.")
+                            if len(selected_modes_q10) != 1:
+                                st.warning("Please select exactly 1 mode.")
 
                             st.write("---")
 
-                            if len(least_represented_images_q9) == 3:
-                                st.write("Q10. Below are 9 things called 'Modes of Connection.' They describe how a person can make an impression, grow friendships, and inspire others. "
-                                         "Which two 'Modes of Connection' sound most like what you would use to make an impression, grow friendships, and inspire others?")
+                            if len(selected_modes_q10) == 1:
+                                if st.button("Submit"):
+                                    top_two_colors, persona_name, score_counter = run_quiz()
+                                    st.write("Based on your responses, your top two personality colors are:")
+                                    st.write(f"1. {top_two_colors[0]}")
+                                    st.write(f"2. {top_two_colors[1]}")
+                                    st.write(f"Your CollegeXpress Persona: {persona_name}")
+                                    st.write(f"Personality Trait Scores: {score_counter}")
+                                    st.session_state['show_additional_info'] = True
 
-                                modes_of_connection = [
-                                    "Achieve With Me",
-                                    "Explore With Me",
-                                    "Strive With Me",
-                                    "Create With Me",
-                                    "Refine With Me",
-                                    "Care With Me",
-                                    "Enjoy With Me",
-                                    "Defy With Me",
-                                    "Invent With Me"
-                                ]
+    if st.session_state.get('show_additional_info'):
+        st.title('Additional Information')
+        st.write("Here's some additional information about the CollegeXpress Personality Survey:")
+        st.write("1. This survey is designed to help you discover your personality traits and find a persona that "
+                 "aligns with your traits.")
+        st.write("2. The survey uses a set of traits and images to assess your personality and determine your top "
+                 "two personality colors.")
+        st.write("3. Your persona is determined based on the combination of your top two colors.")
+        st.write("4. Your selected traits and images play a key role in defining your personality and persona.")
+        st.write("5. Use this information to learn more about yourself and explore colleges and universities that "
+                 "match your persona.")
 
-                                random.seed(st.session_state.get('random_seed', 0))
-                                random.shuffle(modes_of_connection)
-
-                                selected_modes_q10 = []
-                                for mode in modes_of_connection:
-                                    selected = st.checkbox(mode, key=f"checkbox_q10_{mode}")
-                                    if selected:
-                                        selected_modes_q10.append(mode)
-
-                                if len(selected_modes_q10) != 2:
-                                    st.warning("Please select exactly 2 modes.")
-
-                                st.write("---")
-
-                                st.write("Please click 'Submit' once you have completed the quiz.")
-
-    st.markdown("### Additional Information")
-    full_name = st.text_input("Full Name", value="", key="full_name")
-    email_address = st.text_input("Email Address", value="", key="email_address")
-    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Parent/family member", "Other"]
-    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
-
-    if st.button("Submit"):
-        top_two_colors, persona_name, _ = run_quiz()
-
-        if persona_name:
-            st.success(f"Your top two colors are: {top_two_colors[0]} and {top_two_colors[1]}.")
-            st.success(f"Your CollegeXpress Persona is: {persona_name}")
-            st.info("Thank you for completing the CollegeXpress Personality Survey!")
-
-        else:
-            st.warning("Please complete all the questions before submitting.")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     personality_quiz()
