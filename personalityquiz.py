@@ -10,7 +10,6 @@ import requests
 from io import BytesIO
 import random
 
-# Initialize S3 client
 s3 = boto3.client(
     "s3", 
     aws_access_key_id=st.secrets["AWS"]["aws_access_key_id"], 
@@ -18,7 +17,6 @@ s3 = boto3.client(
 )
 bucket_name = st.secrets["AWS"]["bucket_name"]
 
-# Function to upload responses to S3
 def upload_responses_to_s3(responses):
     timestamp_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     unique_id_str = str(uuid.uuid4())
@@ -30,51 +28,191 @@ def upload_responses_to_s3(responses):
     s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 
 def personality_quiz():
-    # (existing trait_score_map, image_score_map, color_priority, and score_counter initialization)
-    
-    # (existing run_quiz and get_persona_name functions)
+    trait_score_map = {
+        "Confident": "Blue", "Curious": "Green", "Determined": "Maroon", "Imaginative": "Orange",
+        "Poised": "Pink", "Compassionate": "Purple", "Enthusiastic": "Red", "Bold": "Silver",
+        "Innovative": "Yellow", "Influential": "Blue", "Adventurous": "Green", "Tough": "Maroon",
+        "Expressive": "Orange", "Polished": "Pink", "Selfless": "Purple", "Playful": "Red",
+        "Independent": "Silver", "Analytical": "Yellow", "Achieve With Me": "Blue", "Explore With Me": "Green",
+        "Strive With Me": "Maroon", "Create With Me": "Orange", "Refine With Me": "Pink", "Care With Me": "Purple",
+        "Enjoy With Me": "Red", "Defy With Me": "Silver", "Invent With Me": "Yellow",
+    }
+
+    image_score_map = {
+        "OrangeSet.jpg": "Orange", "BrownSet.jpg": "Maroon", "RedSet.jpg": "Red", "YellowSet.jpg": "Yellow",
+        "PurpleSet.jpg": "Purple", "BlueSet.jpg": "Blue", "GreenSet.jpg": "Green", "PinkSet.jpg": "Pink",
+        "BlackSet.jpg": "Silver",
+    }
+
+    color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
+    score_counter = Counter({color: 3 for color in color_priority})
     
     st.title('CollegeXpress Personality Survey')
     
-    # (existing traits initialization and shuffling)
-    
-    # (existing UI elements for Q1 to Q10)
-    
-    # New Input Fields
-    full_name = st.text_input("Full Name")
-    email_address = st.text_input("Email Address")
-    association = st.selectbox("Your Association", ["", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
-    
-    # Validation: Check if all questions have been answered and required fields are filled
-    if (full_name and email_address and association and association != ""):
-        # If all validations pass, render the 'Submit' button
-        if st.button("Submit"):
-            # Run the quiz and gather the results
-            top_two_colors, persona_name, score_counter = run_quiz()
-            
-            # Prepare the responses
-            responses = {
-                "full_name": full_name,
-                "email_address": email_address,
-                "association": association,
-                "top_two_colors": top_two_colors,
-                "persona_name": persona_name,
-                # Include other responses and analysis results
-            }
-            
-            # Upload the responses to S3
-            upload_responses_to_s3(responses)
-            
-            # Display the results to the user
-            st.write("Your top two colors are: ", ", ".join(top_two_colors))
-            st.write("Your persona name is: ", persona_name)
-            st.write("Total Scores for Each Color:")
-            for color in color_priority:
-                st.write(f"{color}: {score_counter[color]}")
-    else:
-        st.warning("Please answer all questions and fill in your Full Name, Email Address, and Your Association before submitting.")
+    traits = [
+        "Confident", "Curious", "Determined", "Imaginative", "Poised", "Compassionate",
+        "Enthusiastic", "Bold", "Innovative"
+    ]
+    random.seed(st.session_state.get('random_seed', 0))
+    random.shuffle(traits)
+    selected_traits_q1 = [trait for trait in traits if st.checkbox(trait, key=f"checkbox_q1_{trait}")]
+    st.write("---")
 
-# Set the random seed for each user session
+    if len(selected_traits_q1) == 3:
+        selected_single_trait_q2 = st.selectbox("", selected_traits_q1, key="radio_q2")
+        st.write("---")
+        remaining_traits_q3 = [trait for trait in traits if trait not in selected_traits_q1]
+        random.shuffle(remaining_traits_q3)
+        least_represented_traits_q3 = [trait for trait in remaining_traits_q3 if st.checkbox(trait, key=f"checkbox_q3_{trait}")]
+        st.write("---")
+
+        if len(least_represented_traits_q3) == 3:
+            traits_q4 = ["Influential", "Adventurous", "Tough", "Expressive", "Polished", "Selfless", "Playful", "Independent", "Analytical"]
+            random.shuffle(traits_q4)
+            selected_traits_q4 = [trait for trait in traits_q4 if st.checkbox(trait, key=f"checkbox_q4_{trait}")]
+            st.write("---")
+
+            if len(selected_traits_q4) == 3:
+                selected_single_trait_q5 = st.selectbox("", selected_traits_q4, key="radio_q5")
+                st.write("---")
+                remaining_traits_q6 = [trait for trait in traits_q4 if trait not in selected_traits_q4]
+                random.shuffle(remaining_traits_q6)
+                least_represented_traits_q6 = [trait for trait in remaining_traits_q6 if st.checkbox(trait, key=f"checkbox_q6_{trait}")]
+                st.write("---")
+
+                if len(least_represented_traits_q6) == 3:
+                    image_files_q7 = ["OrangeSet.jpg", "BrownSet.jpg", "RedSet.jpg", "YellowSet.jpg", "PurpleSet.jpg", "BlueSet.jpg", "GreenSet.jpg", "PinkSet.jpg", "BlackSet.jpg"]
+                    random.shuffle(image_files_q7)
+                    selected_images_q7 = []
+                    for i in range(0, len(image_files_q7), 3):
+                        cols = st.columns(3)
+                        for j in range(3):
+                            if i + j < len(image_files_q7):
+                                file = image_files_q7[i + j]
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = cols[j].checkbox("", key=f"q7_{i+j}")
+                                if selected:
+                                    selected_images_q7.append(file)
+                                cols[j].image(image, use_column_width=True)
+                    st.write("---")
+
+                    if len(selected_images_q7) == 3:
+                        selected_image_q8 = None
+                        for i, file in enumerate(selected_images_q7):
+                            image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                            response = requests.get(image_url)
+                            image = Image.open(BytesIO(response.content))
+                            selected = st.checkbox("", key=f"q8_{i}")
+                            st.image(image, use_column_width=True)
+                            if selected:
+                                if selected_image_q8:
+                                    st.warning("Please select only one image.")
+                                else:
+                                    selected_image_q8 = file
+                        st.write("---")
+
+                        if selected_image_q8:
+                            remaining_images_q9 = [file for file in image_files_q7 if file not in selected_images_q7]
+                            random.shuffle(remaining_images_q9)
+                            least_represented_images_q9 = []
+                            cols_q9 = st.columns(3)
+                            for i, file in enumerate(remaining_images_q9):
+                                image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{file}"
+                                response = requests.get(image_url)
+                                image = Image.open(BytesIO(response.content))
+                                selected = cols_q9[i % 3].checkbox("", key=f"q9_{i}")
+                                if selected:
+                                    least_represented_images_q9.append(file)
+                                cols_q9[i % 3].image(image, use_column_width=True)
+                            st.write("---")
+
+                            if len(least_represented_images_q9) == 3:
+                                modes_of_connection = ["Achieve With Me", "Explore With Me", "Strive With Me", "Create With Me", "Refine With Me", "Care With Me", "Enjoy With Me", "Defy With Me", "Invent With Me"]
+                                random.shuffle(modes_of_connection)
+                                selected_modes_q10 = [mode for mode in modes_of_connection if st.checkbox(mode, key=f"checkbox_q10_{mode}")]
+                                st.write("---")
+
+                                if len(selected_modes_q10) == 2:
+                                    full_name = st.text_input("Full Name")
+                                    email_address = st.text_input("Email Address")
+                                    association = st.selectbox("Your Association", ["", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
+                                    
+                                    if full_name and email_address and association and association != "":
+                                        if st.button("Submit"):
+                                            top_two_colors, persona_name, score_counter = run_quiz()
+                                            responses = {
+                                                "full_name": full_name,
+                                                "email_address": email_address,
+                                                "association": association,
+                                                "top_two_colors": top_two_colors,
+                                                "persona_name": persona_name,
+                                            }
+                                            upload_responses_to_s3(responses)
+                                            st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                            st.write("Your persona name is: ", persona_name)
+                                            st.write("Total Scores for Each Color:")
+                                            for color in color_priority:
+                                                st.write(f"{color}: {score_counter[color]}")
+                                    else:
+                                        st.warning("Please fill in your Full Name, Email Address, and Your Association before submitting.")
+
+def run_quiz():
+    for answer in selected_traits_q1:
+        score_counter[trait_score_map[answer]] += 1
+    score_counter[trait_score_map[selected_single_trait_q2]] += 1
+    for answer in least_represented_traits_q3:
+        score_counter[trait_score_map[answer]] -= 1
+    for answer in selected_traits_q4:
+        score_counter[trait_score_map[answer]] += 1
+    score_counter[trait_score_map[selected_single_trait_q5]] += 1
+    for answer in least_represented_traits_q6:
+        score_counter[trait_score_map[answer]] -= 1
+    for image in selected_images_q7:
+        score_counter[image_score_map[image]] += 1
+    score_counter[image_score_map[selected_image_q8]] += 1
+    for image in least_represented_images_q9:
+        score_counter[image_score_map[image]] -= 1
+    for mode in selected_modes_q10:
+        score_counter[trait_score_map[mode]] += 1
+    sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
+    top_two_colors = [color for color, _ in sorted_scores[:2]]
+    persona_name = get_persona_name(top_two_colors[0], top_two_colors[1])
+    return top_two_colors, persona_name, score_counter
+
+def get_persona_name(primary_color, secondary_color):
+    persona_map = {
+        ("Blue", "Maroon"): "Champion", ("Blue", "Green"): "Captain", ("Blue", "Orange"): "Director",
+        ("Blue", "Pink"): "Producer", ("Blue", "Purple"): "Mentor", ("Blue", "Red"): "Coach",
+        ("Blue", "Silver"): "Maverick", ("Blue", "Yellow"): "Visionary", ("Blue", "Beige"): "Achiever",
+        ("Maroon", "Blue"): "Contender", ("Maroon", "Green"): "Need to Find", ("Maroon", "Orange"): "Maker",
+        ("Maroon", "Pink"): "Precisionist", ("Maroon", "Purple"): "Protector", ("Maroon", "Red"): "Energizer",
+        ("Maroon", "Silver"): "Dark Horse", ("Maroon", "Yellow"): "Challenger", ("Maroon", "Beige"): "Competitor",
+        ("Green", "Blue"): "Trailblazer", ("Green", "Maroon"): "Adventurer", ("Green", "Orange"): "Seeker",
+        ("Green", "Pink"): "Detective", ("Green", "Purple"): "Ambassador", ("Green", "Red"): "Globetrotter",
+        ("Green", "Silver"): "Ranger", ("Green", "Yellow"): "Researcher", ("Green", "Beige"): "Explorer",
+        ("Orange", "Blue"): "Architect", ("Orange", "Maroon"): "Artisan", ("Orange", "Green"): "Searcher",
+        ("Orange", "Pink"): "Composer", ("Orange", "Purple"): "Curator", ("Orange", "Red"): "Storyteller",
+        ("Orange", "Silver"): "Nonconformist", ("Orange", "Yellow"): "Ideator", ("Orange", "Beige"): "Creator",
+        ("Pink", "Blue"): "Connoisseur", ("Pink", "Maroon"): "Perfectionist", ("Pink", "Green"): "Philosopher",
+        ("Pink", "Orange"): "Virtuoso", ("Pink", "Purple"): "Idealist", ("Pink", "Red"): "Aficionado",
+        ("Pink", "Silver"): "Refiner", ("Pink", "Yellow"): "Trendsetter", ("Pink", "Beige"): "Sophisticate",
+        ("Purple", "Blue"): "Guide", ("Purple", "Maroon"): "Guardian", ("Purple", "Green"): "Shepherd",
+        ("Purple", "Orange"): "Patron", ("Purple", "Pink"): "Confidant", ("Purple", "Red"): "Host",
+        ("Purple", "Silver"): "Advocate", ("Purple", "Yellow"): "Advisor", ("Purple", "Beige"): "Provider",
+        ("Red", "Blue"): "Motivator", ("Red", "Maroon"): "Dynamo", ("Red", "Green"): "Thrill-seeker",
+        ("Red", "Orange"): "Performer", ("Red", "Pink"): "Enthusiast", ("Red", "Purple"): "Emcee",
+        ("Red", "Silver"): "DaRedevil", ("Red", "Yellow"): "Magician", ("Red", "Beige"): "Entertainer",
+        ("Silver", "Blue"): "Ringleader", ("Silver", "Maroon"): "Instigator", ("Silver", "Green"): "Rogue",
+        ("Silver", "Orange"): "Renegade", ("Silver", "Pink"): "Individualist", ("Silver", "Purple"): "Activist",
+        ("Silver", "Red"): "Rock Star", ("Silver", "Yellow"): "Free-thinker", ("Silver", "Beige"): "Rebel",
+        ("Yellow", "Blue"): "Vanguard", ("Yellow", "Maroon"): "Inventor", ("Yellow", "Green"): "Theorist",
+        ("Yellow", "Orange"): "Originator", ("Yellow", "Pink"): "Dreamer", ("Yellow", "Purple"): "Oracle",
+        ("Yellow", "Red"): "Futurist", ("Yellow", "Silver"): "Reformer", ("Yellow", "Beige"): "Innovator"
+    }
+    return persona_map.get((primary_color, secondary_color), "")
+
 if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
 
