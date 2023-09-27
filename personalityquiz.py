@@ -1,8 +1,12 @@
+
 import uuid
 from datetime import datetime
+
+
 import boto3
 import pandas as pd
 from io import StringIO
+
 import streamlit as st
 from PIL import Image
 from collections import Counter
@@ -442,29 +446,49 @@ object_key = st.secrets["AWS"]["object_key"]
 
 
 def upload_responses_to_s3(responses):
-    # Convert the responses dictionary to DataFrame
-    df = pd.DataFrame([responses])
+    # Generate a DataFrame from the responses dictionary
+    new_response_df = pd.DataFrame([responses])
+    
+    # Try to read the existing CSV file from the S3 bucket
+    try:
+        csv_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
+        existing_responses_df = pd.read_csv(csv_obj['Body'])
+        # Append the new response to the existing responses
+        all_responses_df = existing_responses_df.append(new_response_df, ignore_index=True)
+    except Exception as e:
+        # If the file does not exist, use the new response DataFrame
+        all_responses_df = new_response_df
     
     # Write DataFrame to StringIO object
     csv_buffer = StringIO()
-    df.to_csv(csv_buffer, index=False)
+    all_responses_df.to_csv(csv_buffer, index=False)
     
-    # Upload CSV to S3
+    # Upload the updated CSV to S3
     s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
 
 
-# Add new input fields
-full_name = st.text_input("Full Name")
-email_address = st.text_input("Email Address")
-association = st.selectbox("Your Association", ["Select", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
-
-responses = {
-    "full_name": full_name,
-    "email_address": email_address,
-    "association": association,
-    # Add other responses and analysis results
-}
-upload_responses_to_s3(responses)
+# Create a form
+with st.form(key='response_form'):
+    # Add the new input fields inside the form
+    full_name = st.text_input("Full Name")
+    email_address = st.text_input("Email Address")
+    association = st.selectbox("Your Association", ["Select", "Current Student", "Admitted Student", "Faculty/Staff", "Alum"])
+    
+    # Add a submit button to the form
+    submitted = st.form_submit_button("Submit")
+    
+    # Check if the form is submitted and if all the mandatory fields are filled
+    if submitted:
+        if full_name and email_address and association != "Select":
+            responses = {
+                "full_name": full_name,
+                "email_address": email_address,
+                "association": association,
+                # Add other responses and analysis results
+            }
+            upload_responses_to_s3(responses)
+        else:
+            st.error("Please fill in all the mandatory fields before submitting.")
 
 
 # Generate a unique object key for each response
