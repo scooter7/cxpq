@@ -412,7 +412,19 @@ def personality_quiz():
                                         st.warning("Please select exactly 3 images for Q9.")
                                     elif len(selected_modes_q10) != 2:
                                         st.warning("Please select exactly 2 modes for Q10.")
-                                    
+                                    else:
+                                        top_two_colors, persona_name, score_counter = run_quiz()
+                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                        st.write("Your persona name is: ", persona_name)
+                                        st.write("Total Scores for Each Color:")
+                                        for color in color_priority:
+                                            st.write(f"{color}: {score_counter[color]}")
+
+# Set the random seed for each user session
+if 'random_seed' not in st.session_state:
+    st.session_state.random_seed = random.randint(0, 1000000)
+
+personality_quiz()
     # Additional Questions
     st.markdown("### Additional Information")
     full_name = st.text_input("Full Name", value="", key="full_name")
@@ -427,16 +439,4 @@ def personality_quiz():
         st.warning("Please enter your email address.")
     elif affiliation == "Select":
         st.warning("Please select your affiliation.")
-else:
-                                        top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
-                                        st.write("Total Scores for Each Color:")
-                                        for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
 
-# Set the random seed for each user session
-if 'random_seed' not in st.session_state:
-    st.session_state.random_seed = random.randint(0, 1000000)
-
-personality_quiz()
