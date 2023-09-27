@@ -81,7 +81,84 @@ def personality_quiz():
             ("Blue", "Maroon"): "Champion",
             ("Blue", "Green"): "Captain",
             ("Blue", "Orange"): "Director",
-            # ... (other persona mappings) ...
+            ("Blue", "Pink"): "Producer",
+            ("Blue", "Purple"): "Mentor",
+            ("Blue", "Red"): "Coach",
+            ("Blue", "Silver"): "Maverick",
+            ("Blue", "Yellow"): "Visionary",
+            ("Blue", "Beige"): "Achiever",
+            ("Maroon", "Blue"): "Contender",
+            ("Maroon", "Green"): "Need to Find",
+            ("Maroon", "Orange"): "Maker",
+            ("Maroon", "Pink"): "Precisionist",
+            ("Maroon", "Purple"): "Protector",
+            ("Maroon", "Red"): "Energizer",
+            ("Maroon", "Silver"): "Dark Horse",
+            ("Maroon", "Yellow"): "Challenger",
+            ("Maroon", "Beige"): "Competitor",
+            ("Green", "Blue"): "Trailblazer",
+            ("Green", "Maroon"): "Adventurer",
+            ("Green", "Orange"): "Seeker",
+            ("Green", "Pink"): "Detective",
+            ("Green", "Purple"): "Ambassador",
+            ("Green", "Red"): "Globetrotter",
+            ("Green", "Silver"): "Ranger",
+            ("Green", "Yellow"): "Researcher",
+            ("Green", "Beige"): "Explorer",
+            ("Orange", "Blue"): "Architect",
+            ("Orange", "Maroon"): "Artisan",
+            ("Orange", "Green"): "Searcher",
+            ("Orange", "Pink"): "Composer",
+            ("Orange", "Purple"): "Curator",
+            ("Orange", "Red"): "Storyteller",
+            ("Orange", "Silver"): "Nonconformist",
+            ("Orange", "Yellow"): "Ideator",
+            ("Orange", "Beige"): "Creator",
+            ("Pink", "Blue"): "Connoisseur",
+            ("Pink", "Maroon"): "Perfectionist",
+            ("Pink", "Green"): "Philosopher",
+            ("Pink", "Orange"): "Virtuoso",
+            ("Pink", "Purple"): "Idealist",
+            ("Pink", "Red"): "Aficionado",
+            ("Pink", "Silver"): "Refiner",
+            ("Pink", "Yellow"): "Trendsetter",
+            ("Pink", "Beige"): "Sophisticate",
+            ("Purple", "Blue"): "Guide",
+            ("Purple", "Maroon"): "Guardian",
+            ("Purple", "Green"): "Shepherd",
+            ("Purple", "Orange"): "Patron",
+            ("Purple", "Pink"): "Confidant",
+            ("Purple", "Red"): "Host",
+            ("Purple", "Silver"): "Advocate",
+            ("Purple", "Yellow"): "Advisor",
+            ("Purple", "Beige"): "Provider",
+            ("Red", "Blue"): "Motivator",
+            ("Red", "Maroon"): "Dynamo",
+            ("Red", "Green"): "Thrill-seeker",
+            ("Red", "Orange"): "Performer",
+            ("Red", "Pink"): "Enthusiast",
+            ("Red", "Purple"): "Emcee",
+            ("Red", "Silver"): "DaRedevil",
+            ("Red", "Yellow"): "Magician",
+            ("Red", "Beige"): "Entertainer",
+            ("Silver", "Blue"): "Ringleader",
+            ("Silver", "Maroon"): "Instigator",
+            ("Silver", "Green"): "Rogue",
+            ("Silver", "Orange"): "Renegade",
+            ("Silver", "Pink"): "Individualist",
+            ("Silver", "Purple"): "Activist",
+            ("Silver", "Red"): "Rock Star",
+            ("Silver", "Yellow"): "Free-thinker",
+            ("Silver", "Beige"): "Rebel",
+            ("Yellow", "Blue"): "Vanguard",
+            ("Yellow", "Maroon"): "Inventor",
+            ("Yellow", "Green"): "Theorist",
+            ("Yellow", "Orange"): "Originator",
+            ("Yellow", "Pink"): "Dreamer",
+            ("Yellow", "Purple"): "Oracle",
+            ("Yellow", "Red"): "Futurist",
+            ("Yellow", "Silver"): "Reformer",
+            ("Yellow", "Beige"): "Innovator"
         }
 
         return persona_map.get((primary_color, secondary_color), "")
@@ -328,31 +405,41 @@ def personality_quiz():
         st.warning("Please select your affiliation.")
 
     if st.button("Submit"):
-        if len(selected_traits_q1) != 3:
-            st.warning("Please select exactly 3 traits for Q1.")
-        elif not selected_single_trait_q2:
-            st.warning("Please select a single trait for Q2.")
-        elif len(least_represented_traits_q3) != 3:
-            st.warning("Please select exactly 3 traits for Q3.")
-        elif len(selected_traits_q4) != 3:
-            st.warning("Please select exactly 3 traits for Q4.")
-        elif not selected_single_trait_q5:
-            st.warning("Please select a single trait for Q5.")
-        elif len(least_represented_traits_q6) != 3:
-            st.warning("Please select exactly 3 traits for Q6.")
-        elif len(selected_images_q7) != 3:
-            st.warning("Please select exactly 3 images for Q7.")
-        elif not selected_image_q8:
-            st.warning("Please select a single image for Q8.")
-        elif len(least_represented_images_q9) != 3:
-            st.warning("Please select exactly 3 images for Q9.")
-        elif len(selected_modes_q10) != 2:
-            st.warning("Please select exactly 2 modes for Q10.")
-        elif affiliation == "Select":
-            st.warning("Please select your affiliation.")
-        else:
-            top_two_colors, persona_name, score_counter = run_quiz()
-            st.success("Quiz submitted successfully!")
+    if len(selected_traits_q1) != 3:
+        st.warning("Please select exactly 3 traits for Q1.")
+    elif not selected_single_trait_q2:
+        st.warning("Please select a single trait for Q2.")
+    elif len(least_represented_traits_q3) != 3:
+        st.warning("Please select exactly 3 traits for Q3.")
+    elif len(selected_traits_q4) != 3:
+        st.warning("Please select exactly 3 traits for Q4.")
+    elif not selected_single_trait_q5:
+        st.warning("Please select a single trait for Q5.")
+    elif len(least_represented_traits_q6) != 3:
+        st.warning("Please select exactly 3 traits for Q6.")
+    elif len(selected_images_q7) != 3:
+        st.warning("Please select exactly 3 images for Q7.")
+    elif not selected_image_q8:
+        st.warning("Please select a single image for Q8.")
+    elif len(least_represented_images_q9) != 3:
+        st.warning("Please select exactly 3 images for Q9.")
+    elif len(selected_modes_q10) != 2:
+        st.warning("Please select exactly 2 modes for Q10.")
+    else:
+        top_two_colors, persona_name, score_counter = run_quiz()
+        st.success("Quiz submitted successfully!")
+        show_additional_questions = True
 
-if __name__ == '__main__':
-    personality_quiz()
+if show_additional_questions:
+    st.markdown("### Additional Information")
+    full_name = st.text_input("Full Name", value="", key="full_name")
+    email_address = st.text_input("Email Address", value="", key="email_address")
+    affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
+    affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
+
+    if not full_name:
+        st.warning("Please enter your full name.")
+    elif not email_address:
+        st.warning("Please enter your email address.")
+    elif affiliation == "Select":
+        st.warning("Please select your affiliation.")
