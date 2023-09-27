@@ -316,7 +316,7 @@ def personality_quiz():
 
     st.markdown("### Additional Information")
     full_name = st.text_input("Full Name", value="", key="full_name")
-    email_address = st.text_input("Email Address", value="", key="email_address", type="email")
+    email_address = st.text_input("Email Address", value="", key="email_address")
     affiliation_options = ["Select", "Current student", "Admitted student", "Faculty/staff", "Alum"]
     affiliation = st.selectbox("Affiliation", affiliation_options, key="affiliation")
 
