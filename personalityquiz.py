@@ -4,6 +4,31 @@ from collections import Counter
 import requests
 from io import BytesIO
 import random
+import pandas as pd
+from datetime import datetime
+import boto3
+from io import StringIO
+
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=st.secrets["AWS"]["aws_access_key_id"],
+    aws_secret_access_key=st.secrets["AWS"]["aws_secret_access_key"],
+)
+bucket_name = st.secrets["AWS"]["bucket_name"]
+object_key = st.secrets["AWS"]["object_key"]
+
+def download_csv_from_s3():
+    csv_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
+    body = csv_obj["Body"].read().decode("utf-8")
+    return pd.read_csv(StringIO(body))
+
+def upload_csv_to_s3(df):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+    s3.put_object(Bucket=bucket_name, Key=object_key, Body=csv_buffer.getvalue())
+
+if "df" not in st.session_state:
+    st.session_state.df = download_csv_from_s3()
 
 def personality_quiz():
     trait_score_map = {
@@ -14,12 +39,10 @@ def personality_quiz():
         "Strive With Me": "Maroon", "Create With Me": "Orange", "Refine With Me": "Pink", "Care With Me": "Purple",
         "Enjoy With Me": "Red", "Defy With Me": "Silver", "Invent With Me": "Yellow"
     }
-
     image_score_map = {
         "OrangeSet.jpg": "Orange", "BrownSet.jpg": "Maroon", "RedSet.jpg": "Red", "YellowSet.jpg": "Yellow",
         "PurpleSet.jpg": "Purple", "BlueSet.jpg": "Blue", "GreenSet.jpg": "Green", "PinkSet.jpg": "Pink", "BlackSet.jpg": "Silver"
     }
-
     color_priority = ["Pink", "Blue", "Silver", "Yellow", "Maroon", "Red", "Orange", "Green", "Purple"]
     score_counter = Counter({color: 3 for color in color_priority})
 
@@ -41,7 +64,6 @@ def personality_quiz():
             score_counter[image_score_map[image]] -= 1
         for mode in selected_modes_q10:
             score_counter[trait_score_map[mode]] += 1
-
         sorted_scores = sorted(score_counter.items(), key=lambda item: (-item[1], color_priority.index(item[0])))
         top_two_colors = [color for color, _ in sorted_scores[:2]]
         persona_name = get_persona_name(top_two_colors[0], top_two_colors[1])
@@ -220,6 +242,18 @@ def personality_quiz():
                                         st.write("Total Scores for Each Color:")
                                         for color in color_priority:
                                             st.write(f"{color}: {score_counter[color]}")
+                                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                        new_data = {
+                                            "Timestamp": [timestamp],
+                                            "Full Name": [full_name],
+                                            "Email Address": [email_address],
+                                            "Affiliation": [affiliation],
+                                            "Top Two Colors": [", ".join(top_two_colors)],
+                                            "Persona Name": [persona_name]
+                                        }
+                                        new_df = pd.DataFrame(new_data)
+                                        st.session_state.df = st.session_state.df.append(new_df, ignore_index=True)
+                                        upload_csv_to_s3(st.session_state.df)
 
 if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
