@@ -18,9 +18,12 @@ bucket_name = st.secrets["AWS"]["bucket_name"]
 object_key = st.secrets["AWS"]["object_key"]
 
 def download_csv_from_s3():
-    csv_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
-    body = csv_obj["Body"].read().decode("utf-8")
-    return pd.read_csv(StringIO(body))
+    try:
+        csv_obj = s3.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body'].read().decode('utf-8')
+        return pd.read_csv(StringIO(body))
+    except Exception as e:
+        return pd.DataFrame()
 
 def upload_csv_to_s3(df):
     csv_buffer = StringIO()
