@@ -233,27 +233,32 @@ def personality_quiz():
                                 affiliation = st.selectbox("", ["Admitted Student", "Current Student", "Faculty/Staff", "Alum"], key="affiliation")
 
                                 if st.button("Submit"):
-                                    if not all([full_name.strip(), email_address.strip(), affiliation]):
-                                        st.warning("Please complete all the fields before submitting.")
-                                    else:
-                                        top_two_colors, persona_name, score_counter = run_quiz()
-                                        st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                        st.write("Your persona name is: ", persona_name)
-                                        st.write("Total Scores for Each Color:")
-                                        for color in color_priority:
-                                            st.write(f"{color}: {score_counter[color]}")
-                                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                        new_data = {
-                                            "Timestamp": [timestamp],
-                                            "Full Name": [full_name],
-                                            "Email Address": [email_address],
-                                            "Affiliation": [affiliation],
-                                            "Top Two Colors": [", ".join(top_two_colors)],
-                                            "Persona Name": [persona_name]
-                                        }
-                                        new_df = pd.DataFrame(new_data)
-                                        st.session_state.df = st.session_state.df.append(new_df, ignore_index=True)
-                                        upload_csv_to_s3(st.session_state.df)
+    if not all([full_name.strip(), email_address.strip(), affiliation]):
+        st.warning("Please complete all the fields before submitting.")
+    else:
+        top_two_colors, persona_name, score_counter = run_quiz()
+        st.write("Your top two colors are: ", ", ".join(top_two_colors))
+        st.write("Your persona name is: ", persona_name)
+        st.write("Total Scores for Each Color:")
+        for color in color_priority:
+            st.write(f"{color}: {score_counter[color]}")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_data = {
+            "Timestamp": [timestamp],
+            "Full Name": [full_name],
+            "Email Address": [email_address],
+            "Affiliation": [affiliation],
+            "Top Two Colors": [", ".join(top_two_colors)],
+            "Persona Name": [persona_name]
+        }
+        new_df = pd.DataFrame(new_data)
+        
+        if 'df' not in st.session_state:
+            st.session_state.df = new_df
+        else:
+            st.session_state.df = st.session_state.df.append(new_df, ignore_index=True)
+        
+        upload_csv_to_s3(st.session_state.df)
 
 if 'random_seed' not in st.session_state:
     st.session_state.random_seed = random.randint(0, 1000000)
