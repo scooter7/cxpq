@@ -256,7 +256,7 @@ def personality_quiz():
                                         if 'df' not in st.session_state:
                                             st.session_state.df = new_df
                                         else:
-                                            st.session_state.df = st.session_state.df.append(new_df, ignore_index=True)
+                                            st.session_state.df = pd.concat([st.session_state.df, new_df], ignore_index=True)
 
                                         upload_csv_to_s3(st.session_state.df)
 
