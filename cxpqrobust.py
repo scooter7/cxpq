@@ -317,7 +317,7 @@ def personality_quiz():
 
                                         upload_csv_to_s3(st.session_state.df)
 
-if 'random_seed' not in st.session_state:
-    st.session_state.random_seed = random.randint(0, 1000000)
+    if 'random_seed' not in st.session_state:
+        st.session_state.random_seed = random.randint(0, 1000000)
 
-personality_quiz()
+    personality_quiz()
