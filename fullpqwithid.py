@@ -285,31 +285,31 @@ def personality_quiz():
                                 st.write("ID")
                                 id_input = st.text_input("", key="id_input")
         
-                            if st.button("Submit"):
-                                if not id_input.strip():
-                                st.warning("Please provide an ID before submitting.")
+                                if st.button("Submit"):
+                                    if not id_input.strip():
+                                        st.warning("Please provide an ID before submitting.")
                                 else:
-                                top_two_colors, persona_name, score_counter = run_quiz()
-                                st.write("Your top two colors are: ", ", ".join(top_two_colors))
-                                st.write("Your persona name is: ", persona_name)
-                                st.write("Total Scores for Each Color:")
-                                for color in color_priority:
-                                    st.write(f"{color}: {score_counter[color]}")
-                                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                new_data = {
-                                    "Timestamp": [timestamp],
-                                    "ID": [id_input],
-                                    "Top Two Colors": [", ".join(top_two_colors)],
-                                    "Persona Name": [persona_name]
-                                }
-                                new_df = pd.DataFrame(new_data)
+                                    top_two_colors, persona_name, score_counter = run_quiz()
+                                    st.write("Your top two colors are: ", ", ".join(top_two_colors))
+                                    st.write("Your persona name is: ", persona_name)
+                                    st.write("Total Scores for Each Color:")
+                                    for color in color_priority:
+                                        st.write(f"{color}: {score_counter[color]}")
+                                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                    new_data = {
+                                        "Timestamp": [timestamp],
+                                        "ID": [id_input],
+                                        "Top Two Colors": [", ".join(top_two_colors)],
+                                        "Persona Name": [persona_name]
+                                    }
+                                    new_df = pd.DataFrame(new_data)
 
-                                if 'df' not in st.session_state:
-                                    st.session_state.df = new_df
-                                else:
-                                    st.session_state.df = pd.concat([st.session_state.df, new_df], ignore_index=True)
+                                    if 'df' not in st.session_state:
+                                        st.session_state.df = new_df
+                                    else:
+                                        st.session_state.df = pd.concat([st.session_state.df, new_df], ignore_index=True)
 
-                                upload_csv_to_s3(st.session_state.df)
+                                    upload_csv_to_s3(st.session_state.df)
 
 if 'random_seed' not in st.session_state:
 st.session_state.random_seed = random.randint(0, 1000000)
