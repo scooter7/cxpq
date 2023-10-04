@@ -285,12 +285,11 @@ def personality_quiz():
                                 st.write("ID")
                                 id_input = st.text_input("", key="id_input")
         
-        
-                                if st.button("Submit"):
-                                    if not id_input.strip():
-                                    st.warning("Please provide an ID before submitting.")
-                                    else:
-                                    top_two_colors, persona_name, score_counter = run_quiz()
+                            if st.button("Submit"):
+                                if not id_input.strip():
+                                st.warning("Please provide an ID before submitting.")
+                                else:
+                                top_two_colors, persona_name, score_counter = run_quiz()
                                 st.write("Your top two colors are: ", ", ".join(top_two_colors))
                                 st.write("Your persona name is: ", persona_name)
                                 st.write("Total Scores for Each Color:")
