@@ -222,7 +222,7 @@ def personality_quiz():
                                 selected = cols[j].checkbox("", key=f"q7_{i+j}")
                                 if selected:
                                     selected_images_q7.append(file)
-                                cols[j].image(image, use_column_width=True)
+                                cols[j].image(image, use_container_width=True)
 
                     if len(selected_images_q7) != 3:
                         st.warning("Please select exactly 3 images.")
@@ -236,7 +236,7 @@ def personality_quiz():
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
                             selected = st.checkbox("", key=f"q8_{i}")
-                            st.image(image, use_column_width=True)
+                            st.image(image, use_container_width=True)
                             if selected:
                                 if selected_image_q8:
                                     st.warning("Please select only one image.")
@@ -248,7 +248,7 @@ def personality_quiz():
                             image_url = f"https://raw.githubusercontent.com/scooter7/cxpq/main/{selected_image_q8}"
                             response = requests.get(image_url)
                             image = Image.open(BytesIO(response.content))
-                            st.image(image, use_column_width=True)
+                            st.image(image, use_container_width=True)
                         st.write("---")
 
                         if selected_image_q8:
@@ -266,7 +266,7 @@ def personality_quiz():
                                 selected = cols_q9[i % 3].checkbox("", key=f"q9_{i}")
                                 if selected:
                                     least_represented_images_q9.append(file)
-                                cols_q9[i % 3].image(image, use_column_width=True)
+                                cols_q9[i % 3].image(image, use_container_width=True)
 
                             if len(least_represented_images_q9) != 3:
                                 st.warning("Please select exactly 3 images.")
